@@ -57,7 +57,7 @@ var Data = (function () {
       cat: DEFAULT_CATS[2].k,
       alert: false, alertWhy: "",
       star: 3,
-      org: "", area: "", family: "", trait: "", likes: "", avoid: "",
+      org: "", area: "", family: "", trait: "", likes: "", dislikes: "", avoid: "",
       contacts: [],
       tags: [],
       mbti: { code: "", sure: "" },     // sure: "said" | "guess" | ""
@@ -120,7 +120,7 @@ var Data = (function () {
 
     db.people.forEach(function (p) {
       if (typeof p.name !== "string") p.name = "";
-      ["kana", "nick", "org", "area", "family", "trait", "likes", "avoid", "alertWhy"].forEach(function (k) {
+      ["kana", "nick", "org", "area", "family", "trait", "likes", "dislikes", "avoid", "alertWhy"].forEach(function (k) {
         if (typeof p[k] !== "string") p[k] = "";
       });
       if (!p.cat) p.cat = DEFAULT_CATS[4].k;

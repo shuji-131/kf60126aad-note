@@ -113,6 +113,7 @@ UI.viewPerson = function () {
       UI.field("住まい", p.area) +
       UI.field("家族・ペット", p.family) +
       UI.field("好きなもの", p.likes) +
+      UI.field("嫌いなもの", p.dislikes) +
       UI.field("触れない事", p.avoid, true) +
       '<div class="field"><div class="k">生年月日</div><div class="v">' +
         (birth ? UI.esc(birth) : '<span class="blank">不明</span>') +

@@ -118,10 +118,24 @@ UI.viewEdit = function () {
       UI.input({ label: "特徴", name: "trait", type: "textarea", rows: 3, value: d.trait,
                  ph: "話し方がゆっくり／メガネ／犬を2匹飼っている",
                  help: "見た目・話し方・人柄など、その人を思い出せることを何行でも。検索にも効きます" }) +
-      UI.input({ label: "所属・仕事", name: "org", value: d.org }) +
-      UI.input({ label: "住まい", name: "area", value: d.area }) +
-      UI.input({ label: "家族・ペット", name: "family", value: d.family }) +
-      UI.input({ label: "好きなもの・話題", name: "likes", value: d.likes }) +
+      /* ★覚え書きは全部、何行でも書ける欄にそろえる。
+         1行の欄だと「会社名」と「部署」を分けて書けず、記号で詰めることになっていた。
+         人の頁でも改行のまま出る（UI.field が UI.nl2br を通している） */
+      UI.input({ label: "所属・仕事", name: "org", type: "textarea", rows: 2, value: d.org,
+                 ph: "株式会社○○／営業二課",
+                 help: "ここから下はどの欄も<b>改行できます</b>。行を分けて何行でも書けます" }) +
+      UI.input({ label: "住まい", name: "area", type: "textarea", rows: 2, value: d.area }) +
+      UI.input({ label: "家族・ペット", name: "family", type: "textarea", rows: 3, value: d.family,
+                 ph: "奥さんと娘さんが2人" }) +
+      UI.input({ label: "好きなもの・話題", name: "likes", type: "textarea", rows: 3, value: d.likes,
+                 ph: "サウナ" }) +
+      /* ★「好きなもの」と対で残す。
+         下の「触れない方がいいこと」とは別物。
+         こちらは嫌いな食べ物や苦手なもの（選ぶ時に避ける）、
+         触れない事は話題そのものの地雷（赤字で出る） */
+      UI.input({ label: "嫌いなもの・苦手なもの", name: "dislikes", type: "textarea", rows: 3, value: d.dislikes,
+                 ph: "辛いもの／猫はアレルギー",
+                 help: "店や贈り物を選ぶ時に見る欄です。話題そのものを避けたい時は下の「触れない方がいいこと」へ" }) +
       UI.input({ label: "触れない方がいいこと", name: "avoid", type: "textarea", rows: 2, value: d.avoid }) +
       '<div class="fld"><span class="lb">生年月日</span>' +
         '<button class="btn ghost wide" data-act="birth">' + (birth ? UI.esc(birth) : "不明のまま（押すと入れられます）") + '</button>' +

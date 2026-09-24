@@ -87,7 +87,7 @@ var Select = (function () {
   }
 
   function haystack(p) {
-    return [p.name, p.kana, p.nick, p.org, p.area, p.met.where, p.met.by, p.trait, p.likes, p.family,
+    return [p.name, p.kana, p.nick, p.org, p.area, p.met.where, p.met.by, p.trait, p.likes, p.dislikes, p.family,
       p.tags.join(" "), p.log.map(function (l) { return l.x; }).join(" ")].join(" ").toLowerCase();
   }
 
