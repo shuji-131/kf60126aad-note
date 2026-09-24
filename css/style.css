@@ -1,0 +1,641 @@
+@charset "utf-8";
+/* ===========================================================
+   友人帳 — 見た目
+   藍染めの段階を色の軸にする。甕覗き→浅葱→縹→藍→留紺。
+   朱は「注意の印」と「今いる場所」だけ。あちこちに置かない。
+   =========================================================== */
+:root{
+  --paper:#E9EDF2; --card:#FBFCFD; --card2:#F1F4F8;
+  --line:#D3DBE4;  --line2:#E3E9EF;
+  --ink:#151F31;   --ink2:#31405A; --sub:#5D6E85; --dim:#8895A6;
+  --ai:#28497A;    --hanada:#3A6EA8; --asagi:#3E8C9E; --kame:#A9C7DA;
+  --shu:#A8382F;   --shu-soft:#F0DEDA;
+  --good:#2E6E52;  --warn:#8A5A16;
+  --sh1:0 1px 2px rgba(16,32,56,.06);
+  --sh2:0 2px 6px rgba(16,32,56,.07), 0 14px 40px rgba(16,32,56,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E131B; --card:#171F2A; --card2:#1D2733;
+    --line:#2A3644;  --line2:#222C39;
+    --ink:#E5EBF3;   --ink2:#C3CEDC; --sub:#93A2B5; --dim:#6F7E91;
+    --ai:#7CA4D8;    --hanada:#6A9AD0; --asagi:#5CB0C0; --kame:#3A5670;
+    --shu:#D9756A;   --shu-soft:#3A2723;
+    --good:#5FB98C;  --warn:#D2A054;
+    --sh1:0 1px 2px rgba(0,0,0,.4);
+    --sh2:0 2px 6px rgba(0,0,0,.4), 0 14px 40px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E131B; --card:#171F2A; --card2:#1D2733;
+  --line:#2A3644;  --line2:#222C39;
+  --ink:#E5EBF3;   --ink2:#C3CEDC; --sub:#93A2B5; --dim:#6F7E91;
+  --ai:#7CA4D8;    --hanada:#6A9AD0; --asagi:#5CB0C0; --kame:#3A5670;
+  --shu:#D9756A;   --shu-soft:#3A2723;
+  --good:#5FB98C;  --warn:#D2A054;
+  --sh1:0 1px 2px rgba(0,0,0,.4);
+  --sh2:0 2px 6px rgba(0,0,0,.4), 0 14px 40px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+/* ★hidden を必ず効かせる。.chip などが display を持っているので、
+   ブラウザ既定の [hidden]{display:none} だけでは勝てない（候補の絞り込みで使う） */
+[hidden]{display:none!important}
+html,body{height:100%}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic UI",Meiryo,system-ui,sans-serif;
+  font-size:16px;line-height:1.85;-webkit-font-smoothing:antialiased;
+}
+button,input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--shu);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+#app{
+  position:fixed;inset:0;display:flex;flex-direction:column;
+  padding-top:env(safe-area-inset-top);
+}
+.mincho{font-family:"Shippori Mincho","Yu Mincho","Hiragino Mincho ProN",serif}
+
+/* ---------- 上帯 ---------- */
+.appbar{flex:none;background:var(--card);border-bottom:1px solid var(--line);padding:10px 14px 0}
+.appbar-row{display:flex;align-items:center;gap:8px;min-height:40px}
+.appbar-title{
+  font-family:"Shippori Mincho",serif;font-size:20px;font-weight:600;
+  letter-spacing:.07em;margin:0;flex:1;min-width:0;line-height:1.4;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.appbar-title.sm{font-size:16.5px;letter-spacing:.04em}
+.iconbtn{
+  width:40px;height:40px;flex:none;border:none;background:none;cursor:pointer;
+  border-radius:11px;color:var(--sub);display:grid;place-items:center;
+}
+.iconbtn.txt{width:auto;padding:0 13px;font-size:13.5px;font-weight:500;color:var(--ai)}
+.iconbtn.txt.primary{background:var(--ai);color:#fff;font-weight:700}
+.iconbtn.sm{width:34px;height:34px;border-radius:9px}
+.iconbtn:active{background:var(--card2)}
+.iconbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.iconbtn.sm svg{width:17px;height:17px}
+
+/* ★戻る札。アイコンだけにしない */
+.backbtn{
+  display:inline-flex;align-items:center;gap:2px;flex:none;max-width:58%;
+  border:1px solid var(--line);background:var(--card2);color:var(--ai);
+  border-radius:99px;padding:7px 14px 7px 9px;cursor:pointer;
+  font-size:13px;font-weight:700;line-height:1;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+.backbtn svg{width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.backbtn:active{background:var(--ai);border-color:var(--ai);color:#fff}
+.backwide{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:calc(100% - 36px);margin:18px 18px 2px;padding:15px 0;border-radius:14px;
+  border:1px solid var(--line);background:var(--card);color:var(--ai);
+  font-size:14px;font-weight:700;cursor:pointer;
+}
+.backwide svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.backwide:active{background:var(--ai);border-color:var(--ai);color:#fff}
+
+/* 50音のつまみ見出し */
+.index{display:flex;flex-wrap:wrap;gap:3px;padding:8px 0 0}
+.index button{
+  flex:1 1 0;min-width:36px;border:1px solid var(--line);border-bottom:none;
+  background:var(--card2);color:var(--sub);border-radius:9px 9px 0 0;padding:9px 0 8px;
+  font-family:"Shippori Mincho",serif;font-size:15px;font-weight:600;cursor:pointer;position:relative;line-height:1;
+}
+.index button.on{background:var(--ai);border-color:var(--ai);color:#fff}
+.index button.on::after{
+  content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);
+  width:16px;height:2px;background:var(--shu);border-radius:2px;
+}
+.index button.empty{opacity:.34}
+
+/* 絞りの帯 */
+.tagstrip{display:flex;gap:7px;overflow-x:auto;padding:11px 0 12px;scrollbar-width:none}
+.tagstrip::-webkit-scrollbar{display:none}
+.chip{
+  flex:none;border:1px solid var(--line);background:var(--card);color:var(--sub);
+  border-radius:99px;padding:6px 14px;font-size:13px;cursor:pointer;white-space:nowrap;line-height:1.5;
+  display:inline-flex;align-items:center;gap:2px;
+}
+.chip.on{background:var(--ai);border-color:var(--ai);color:#fff;font-weight:500}
+.chip.warn{border-color:var(--shu);color:var(--shu)}
+.chip.warn.on{background:var(--shu);border-color:var(--shu);color:#fff}
+.chip.dashed{border-style:dashed;color:var(--dim)}
+.chip .n{opacity:.65;margin-left:5px;font-size:11.5px;font-variant-numeric:tabular-nums}
+.chip .x{margin-left:7px;opacity:.75;font-size:12px;padding:0 2px}
+.strip-div{flex:none;width:1px;background:var(--line);margin:3px 2px;align-self:stretch}
+
+/* ★タグの帯（1行・横スクロール）
+   数で切り捨てず全部入れる。入りきらないぶんは横に流して探せるようにする。
+   札は縮めない（flex:none）＝端で切れた札そのものが「まだ右にある」合図になる */
+.tagrail{
+  display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+}
+.tagrail::-webkit-scrollbar{display:none}
+.tagrail>*{flex:none}
+/* 一覧の行の中。文字だけの小さい札 */
+.tagrail.inrow{gap:9px;margin-top:3px;font-size:11.5px;line-height:1.5;padding-bottom:1px}
+.tagrail.inrow .tg{white-space:nowrap}
+/* 入力画面で選ぶ帯 */
+.tagrail.pick{padding:1px 0 2px;margin-bottom:10px}
+.tagrail.pick:empty{display:none}
+
+.activebar{
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:9px 14px;
+  background:var(--card2);border-bottom:1px solid var(--line);font-size:13px;color:var(--sub);
+}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;background:var(--card);
+  border:1px solid var(--line);border-radius:99px;padding:4px 6px 4px 12px;font-size:12.5px;color:var(--ink2);
+}
+.pill b{font-weight:500}
+.pill span{
+  width:18px;height:18px;border-radius:50%;background:var(--line);
+  display:grid;place-items:center;font-size:11px;color:var(--sub);cursor:pointer;line-height:1;
+}
+.count{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--dim);font-size:12.5px}
+
+/* ---------- 本体 ---------- */
+.view{
+  flex:1;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+}
+.rowhead{display:flex;align-items:center;gap:11px;padding:16px 18px 7px}
+.rowhead b{font-family:"Shippori Mincho",serif;font-size:14px;font-weight:600;color:var(--asagi);letter-spacing:.16em}
+.rowhead i{flex:1;height:1px;background:var(--line);display:block}
+
+.person{
+  display:flex;gap:13px;align-items:center;padding:12px 18px;width:100%;text-align:left;
+  border:none;border-bottom:1px solid var(--line2);background:none;cursor:pointer;position:relative;color:inherit;
+}
+.person:active{background:var(--card)}
+.person.alert::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--shu)}
+.person.alert{background:linear-gradient(90deg,var(--shu-soft),transparent 46%)}
+.warnbadge{
+  display:inline-flex;align-items:center;gap:4px;background:var(--shu);color:#fff;border-radius:6px;
+  padding:1px 7px;font-size:10px;font-weight:700;line-height:1.7;letter-spacing:.1em;flex:none;
+}
+.av{
+  width:48px;height:48px;flex:none;border-radius:50%;display:grid;place-items:center;color:#fff;
+  font-family:"Shippori Mincho",serif;font-size:20px;font-weight:600;line-height:1;
+  background-size:cover;background-position:center;overflow:hidden;
+}
+.av.lg{width:76px;height:76px;font-size:31px}
+.av.hasimg{color:transparent}
+.person .nm{flex:1;min-width:0}
+.person .nm h4{
+  font-family:"Shippori Mincho",serif;font-size:17px;font-weight:600;margin:0;
+  letter-spacing:.03em;line-height:1.5;display:flex;align-items:center;gap:7px;
+}
+.person .nm .kana{font-size:11.5px;color:var(--dim);margin:0;line-height:1.6;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.person .nm .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11.5px;color:var(--sub);margin-top:3px;line-height:1.5}
+.cat{display:inline-flex;align-items:center;gap:5px;flex:none}
+.cat i{width:8px;height:8px;border-radius:2px;display:inline-block;flex:none}
+.tg{color:var(--asagi)}
+.stars{color:var(--shu);letter-spacing:.06em;font-size:11px}
+.ago{font-variant-numeric:tabular-nums;color:var(--dim);margin-left:auto;font-size:11.5px;flex:none;text-align:right}
+.ago .cold,.cold{color:var(--shu)}
+
+.emptybox{padding:26px 20px;text-align:center;color:var(--dim);font-size:13.5px;line-height:1.9}
+
+/* ---------- 下タブ ---------- */
+.tabbar{
+  flex:none;display:flex;background:var(--card);border-top:1px solid var(--line);
+  padding:4px 0 calc(8px + env(safe-area-inset-bottom));
+}
+.tabbar button{
+  flex:1;border:none;background:none;cursor:pointer;color:var(--dim);
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:7px 0 4px;font-size:10.5px;letter-spacing:.04em;position:relative;
+}
+.tabbar button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button.on{color:var(--ai);font-weight:700}
+.tabbar button.on::before{
+  content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:22px;height:2px;background:var(--shu);border-radius:2px;
+}
+.tabbar .badge{
+  position:absolute;top:3px;right:calc(50% - 20px);background:var(--shu);color:#fff;border-radius:99px;
+  min-width:16px;height:16px;padding:0 4px;font-size:10px;font-weight:700;
+  display:grid;place-items:center;line-height:1;font-variant-numeric:tabular-nums;
+}
+.fab{
+  position:absolute;right:16px;bottom:calc(78px + env(safe-area-inset-bottom));
+  width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--ai);color:#fff;font-size:28px;line-height:1;
+  box-shadow:0 6px 20px rgba(20,45,90,.35);display:grid;place-items:center;z-index:5;
+}
+
+/* ---------- その人の頁 ---------- */
+.phead{padding:20px 18px 16px;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:15px;align-items:flex-start}
+.avwrap{position:relative;cursor:pointer;flex:none}
+.camic{
+  position:absolute;right:-2px;bottom:-2px;width:25px;height:25px;border-radius:50%;
+  background:var(--card);border:1px solid var(--line);display:grid;place-items:center;color:var(--sub);
+}
+.camic svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.phead .t{flex:1;min-width:0}
+.phead h2{font-family:"Shippori Mincho",serif;font-size:23px;font-weight:600;margin:0;letter-spacing:.04em;line-height:1.4}
+.phead .kana{font-size:12px;color:var(--dim);margin:1px 0 0}
+.phead .nick{font-size:13px;color:var(--sub);margin:5px 0 0}
+.phead .row{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.phead .chip{padding:3px 11px;font-size:11.5px}
+.phead .tagrail{margin-top:8px;margin-bottom:0}
+
+.alertbar{
+  display:flex;gap:11px;align-items:flex-start;padding:13px 18px;background:var(--shu-soft);
+  border-bottom:1px solid color-mix(in srgb,var(--shu) 26%,transparent);
+}
+.alertbar .ic{
+  flex:none;width:22px;height:22px;border-radius:50%;background:var(--shu);color:#fff;
+  display:grid;place-items:center;font-size:13px;font-weight:700;line-height:1;
+}
+.alertbar .tx{flex:1;min-width:0;font-size:13px;line-height:1.8;color:var(--shu)}
+.alertbar .tx b{display:block;font-size:11px;letter-spacing:.14em;margin-bottom:1px}
+
+.types{display:flex;gap:9px;padding:14px 18px;background:var(--card);border-bottom:1px solid var(--line)}
+.typebtn{
+  flex:1;border:1px solid var(--line);background:var(--card2);border-radius:13px;padding:11px 12px;
+  cursor:pointer;text-align:left;color:inherit;display:block;min-width:0;
+}
+.typebtn .lb{font-size:10.5px;letter-spacing:.14em;color:var(--dim);display:block;line-height:1.6}
+.typebtn .cd{font-size:17px;font-weight:700;color:var(--ai);letter-spacing:.09em;display:block;line-height:1.45}
+.typebtn .nmj{
+  font-family:"Shippori Mincho",serif;font-size:12.5px;color:var(--ink2);display:block;line-height:1.5;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.sure{display:inline-block;font-size:10px;border-radius:99px;padding:1px 7px;border:1px solid currentColor;line-height:1.6;margin-top:4px}
+.sure.yes{color:var(--good)}
+.sure.no{color:var(--warn)}
+
+.sec{padding:18px 18px 4px}
+.sec h3{
+  font-size:11.5px;letter-spacing:.18em;color:var(--asagi);font-weight:700;margin:0 0 6px;
+  display:flex;align-items:center;gap:9px;
+}
+.sec h3 i{flex:1;height:1px;background:var(--line);display:block}
+.sec h3 button{
+  border:1px solid var(--line);background:var(--card);border-radius:99px;color:var(--sub);
+  font-size:11px;padding:3px 11px;cursor:pointer;letter-spacing:.04em;font-weight:500;flex:none;
+}
+.sec h3 .seccount{
+  flex:none;font-size:10.5px;letter-spacing:.06em;color:var(--dim);font-weight:500;
+  font-variant-numeric:tabular-nums;
+}
+.secbody{padding:0 18px}
+.secnote{margin:0;padding:0 18px 6px;font-size:11.5px;color:var(--dim);line-height:1.75}
+.field{display:flex;gap:12px;padding:7px 0;font-size:14px;line-height:1.8}
+.field .k{width:82px;flex:none;color:var(--dim);font-size:12.5px;padding-top:2px}
+.field .v{flex:1;min-width:0;color:var(--ink2);word-break:break-word}
+.field .v.warnv{color:var(--shu)}
+/* ★連絡先に貼られたURL。押して開ける（Androidは端末のブラウザへ渡る）。
+   指で押す所なので、字だけでなく高さを持たせる */
+.clink{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;
+  color:var(--ai);text-decoration:none;padding:4px 0;min-height:32px}
+.clink .u{text-decoration:underline;text-underline-offset:3px;word-break:break-all}
+.clink .go{flex:none;font-size:11.5px;font-weight:700;color:var(--ai);
+  border:1px solid color-mix(in srgb,var(--ai) 35%,var(--line));
+  background:var(--card2);border-radius:999px;padding:3px 9px;text-decoration:none}
+.clink:active{opacity:.6}
+.field .sub2{font-size:11.5px;color:var(--dim);margin-top:3px;line-height:1.6}
+.blank{color:var(--dim);opacity:.65}
+
+/* 記録 */
+.log{padding:2px 18px 6px}
+.entry{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line2);cursor:pointer}
+.entry .mk{flex:none;width:19px;display:flex;flex-direction:column;align-items:center;padding-top:6px}
+.entry .mk .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.entry .mk .ln{flex:1;width:1px;background:var(--line);margin-top:5px}
+.entry.met .dot{background:var(--ai)}
+.entry.note .dot{background:none;border:1.5px solid var(--kame)}
+.entry .bd{flex:1;min-width:0}
+.entry .d{font-size:11.5px;color:var(--dim);font-variant-numeric:tabular-nums;display:flex;gap:8px;align-items:center;line-height:1.7;flex-wrap:wrap}
+.entry .d em{font-style:normal;border-radius:99px;padding:1px 8px;font-size:10px;line-height:1.7}
+.entry.met .d em{background:var(--ai);color:#fff}
+.entry.note .d em{background:var(--card2);color:var(--sub);border:1px solid var(--line)}
+.entry .x{font-size:13.5px;color:var(--ink2);line-height:1.85;margin:3px 0 0}
+.mini{
+  font-size:11.5px;font-weight:700;letter-spacing:.06em;border-radius:7px;padding:3px 9px;
+  border:1px solid var(--line);color:var(--ink2);background:var(--card2);cursor:pointer;line-height:1.6;
+}
+
+/* 記録のうち「予定だったもの」＝日が過ぎて移ってきたぶん。
+   ○メモ と同じ扱い（会ったことにはしない）だが、見た目で区別できるようにする */
+.entry.isplan .dot{background:none;border:1.5px solid var(--hanada);border-radius:2px;transform:rotate(45deg)}
+.entry.isplan .d em{
+  background:var(--card2);color:var(--hanada);
+  border:1px solid color-mix(in srgb,var(--hanada) 40%,transparent);
+}
+
+/* ---------- 予定（記録とは別の入れもの） ---------- */
+.plans{padding:2px 18px 6px}
+.plan{
+  display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;color:inherit;
+  background:none;border:none;border-bottom:1px solid var(--line2);padding:11px 0;cursor:pointer;
+}
+.plan:active{background:var(--card)}
+.plan .mk{flex:none;width:19px;display:flex;justify-content:center;padding-top:6px}
+.plan .dia{
+  width:9px;height:9px;flex:none;border:1.5px solid var(--hanada);border-radius:2px;transform:rotate(45deg);
+}
+.plan .bd{flex:1;min-width:0}
+.plan .d{
+  font-size:11.5px;color:var(--dim);font-variant-numeric:tabular-nums;
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;line-height:1.7;
+}
+.plan .d em{
+  font-style:normal;border-radius:99px;padding:1px 8px;font-size:10px;line-height:1.7;
+  background:var(--hanada);color:#fff;
+}
+.plan .x{font-size:13.5px;color:var(--ink2);line-height:1.85;margin:3px 0 0}
+.plan .soon{color:var(--asagi);font-weight:700}
+.plan .now{color:var(--shu);font-weight:700}
+.plan.over{opacity:.74}
+.plan.over .dia{border-color:var(--dim)}
+.plan.over .d em{background:var(--card2);color:var(--sub);border:1px solid var(--line)}
+
+/* ---------- 早見表 ---------- */
+.seg{display:flex;gap:4px;background:var(--card2);border-radius:12px;padding:4px;margin:10px 0 12px}
+.seg button{flex:1;border:none;background:none;border-radius:9px;padding:10px 0;cursor:pointer;font-size:13.5px;color:var(--sub);font-weight:500}
+.seg button.on{background:var(--ai);color:#fff;font-weight:700}
+.seg button.on.warn{background:var(--shu)}
+.seg.small{margin:0}
+.seg.small button{font-size:12.5px;padding:8px 0}
+/* 3つ並ぶ時は狭いので、文字を少し小さくして折り返させない */
+.seg.three button{font-size:12.5px;padding:10px 2px;white-space:nowrap}
+.disclaim{margin:12px 18px 4px;padding:10px 13px;border-radius:11px;background:var(--card2);border:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.75}
+.grouphead{padding:16px 18px 6px;font-family:"Shippori Mincho",serif;font-size:13px;letter-spacing:.16em;color:var(--asagi);font-weight:600}
+.tyrow{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 18px;
+  border:none;border-bottom:1px solid var(--line2);background:none;cursor:pointer;color:inherit;
+}
+.tyrow .cd{font-size:13px;font-weight:700;letter-spacing:.09em;color:var(--ai);width:52px;flex:none}
+.tyrow .nmj{font-family:"Shippori Mincho",serif;font-size:15px;flex:1;min-width:0;letter-spacing:.03em}
+.tyrow .cnt{flex:none;font-size:11.5px;color:var(--shu);background:var(--shu-soft);border-radius:99px;padding:2px 9px;font-variant-numeric:tabular-nums;line-height:1.6}
+.tyrow .cnt.zero{color:var(--dim);background:var(--card2)}
+.axis{display:flex;gap:9px;padding:4px 18px 12px}
+.axcard{flex:1;border:1px solid var(--line);border-radius:11px;padding:9px 10px;background:var(--card);text-align:center}
+.axcard b{display:block;font-size:14px;color:var(--ai);letter-spacing:.08em;line-height:1.5}
+.axcard span{display:block;font-size:10.5px;color:var(--sub);line-height:1.6;margin-top:2px}
+.tydetail{padding:0 18px 12px}
+.tybig{text-align:center;padding:22px 0 16px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.tybig .cd{font-size:31px;font-weight:700;letter-spacing:.16em;color:var(--ai);line-height:1.2}
+.tybig .nmj{font-family:"Shippori Mincho",serif;font-size:21px;letter-spacing:.06em;margin-top:3px}
+.tybig .one{font-size:13.5px;color:var(--sub);margin-top:8px;line-height:1.8}
+.sec.plain{padding-left:0;padding-right:0}
+.reftext{margin:0;font-size:14.5px;line-height:1.95;color:var(--ink2)}
+.refsub{margin:0;font-size:14px;color:var(--sub)}
+.matchgrid{display:flex;gap:9px;margin-top:12px}
+.matchbox{flex:1;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--card)}
+.matchbox .lb{font-size:10.5px;letter-spacing:.14em;color:var(--dim);line-height:1.7}
+.matchbox.good{border-color:color-mix(in srgb,var(--good) 35%,var(--line))}
+.matchbox.bad{border-color:color-mix(in srgb,var(--shu) 35%,var(--line))}
+.matchbox .cds{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+
+/* ---------- 気にかける・控え ---------- */
+.callout{
+  margin:14px 18px;padding:13px 15px;border-radius:13px;background:var(--shu-soft);
+  border:1px solid color-mix(in srgb,var(--shu) 26%,transparent);color:var(--shu);font-size:13px;line-height:1.8;
+}
+.callout.ok{background:var(--card2);border-color:var(--line);color:var(--sub)}
+.callout.info{background:var(--card2);border-color:var(--line);color:var(--sub)}
+.bigbtn{
+  display:block;width:calc(100% - 36px);margin:9px 18px;border:1px solid var(--line);background:var(--card);
+  border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;color:inherit;
+}
+.bigbtn b{display:block;font-size:14.5px;font-weight:500;line-height:1.6}
+.bigbtn span{display:block;font-size:12px;color:var(--sub);line-height:1.7;margin-top:2px}
+.bigbtn.primary{background:var(--ai);border-color:var(--ai);color:#fff}
+.bigbtn.primary span{color:rgba(255,255,255,.8)}
+.bigbtn.danger{border-color:color-mix(in srgb,var(--shu) 45%,var(--line));color:var(--shu)}
+.bigbtn.danger span{color:color-mix(in srgb,var(--shu) 70%,var(--sub))}
+.meter{height:7px;border-radius:99px;background:var(--line);overflow:hidden;margin:9px 0 0}
+.meter i{display:block;height:100%;background:var(--asagi);border-radius:99px}
+.usage{font-size:13.5px;color:var(--sub);line-height:1.9}
+.usub{font-size:11.5px;color:var(--dim);margin-top:5px}
+.about p{margin:0 0 8px;font-size:13.5px;color:var(--sub);line-height:1.9}
+.about .dim{color:var(--dim);font-size:12px}
+
+/* ---------- 写真の位置合わせ ---------- */
+.cropwrap{padding:18px 18px 0;text-align:center}
+/* ★--ring = 切り取る丸の直径（正方形の一辺に対する割合）。
+   js/photos.js の RING と必ず同じ値にすること。ここだけ直すとまたズレる。
+   暗くする穴・白い輪・実際に保存される丸 の三つが、この一つの値から出る。 */
+.cropstage{--ring:82%;position:relative;width:100%;aspect-ratio:1;border-radius:16px;overflow:hidden;background:#0C1119;touch-action:none;cursor:grab}
+.cropimg{position:absolute;left:0;top:0;width:100%;height:100%}
+/* ★closest-side を必ず書く。書かないと既定が farthest-corner（半対角線）になり、
+   82% と書いても実際の穴は 82%×0.7071＝58% になってしまう（2026-09-10のズレの原因） */
+.cropmask{
+  position:absolute;inset:0;pointer-events:none;background:rgba(8,12,18,.62);
+  -webkit-mask:radial-gradient(circle closest-side at center, transparent 0 var(--ring), #000 calc(var(--ring) + 0.4%));
+  mask:radial-gradient(circle closest-side at center, transparent 0 var(--ring), #000 calc(var(--ring) + 0.4%));
+}
+.cropring{position:absolute;inset:0;pointer-events:none;border-radius:50%;margin:calc((100% - var(--ring)) / 2);border:1.5px solid rgba(255,255,255,.55)}
+.slider{display:flex;align-items:center;gap:12px;margin:18px 0 4px;color:var(--dim);font-size:12px}
+input[type=range]{flex:1;accent-color:var(--ai);height:26px}
+.croprow{display:flex;gap:9px;margin-top:8px;flex-wrap:wrap}
+.croprow .btn{flex:1 1 30%}
+
+/* ---------- メモ ---------- */
+.memo{
+  display:block;width:100%;text-align:left;color:inherit;background:none;border:none;
+  border-bottom:1px solid var(--line2);padding:13px 18px;cursor:pointer;position:relative;
+}
+.memo:active{background:var(--card)}
+.memo.pinned{background:linear-gradient(90deg,color-mix(in srgb,var(--asagi) 12%,transparent),transparent 44%)}
+.memo.pinned::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--asagi)}
+.memo .ttl{
+  font-family:"Shippori Mincho",serif;font-size:16px;font-weight:600;letter-spacing:.03em;
+  margin:0;line-height:1.6;display:flex;align-items:center;gap:7px;
+}
+.memo .ttl .pinic{color:var(--asagi);font-size:11px;flex:none;letter-spacing:0}
+.memo .ttl.untitled{color:var(--ink2);font-weight:500}
+.memo .bd{
+  font-size:13px;color:var(--sub);line-height:1.8;margin:3px 0 0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.memo .mt{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:8px;font-size:11.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+.memo .when{margin-left:auto;flex:none}
+.todo{
+  display:inline-flex;align-items:center;flex:none;border-radius:6px;padding:1px 9px;
+  font-size:10.5px;font-weight:700;letter-spacing:.09em;line-height:1.75;
+  background:color-mix(in srgb,var(--asagi) 15%,transparent);color:var(--asagi);
+  border:1px solid color-mix(in srgb,var(--asagi) 34%,transparent);
+}
+.todo.done{background:var(--card2);color:var(--dim);border-color:var(--line)}
+.whodots{display:inline-flex;align-items:center;flex:none;padding-right:7px}
+.whodots .av{width:21px;height:21px;font-size:10px;margin-right:-7px;box-shadow:0 0 0 1.5px var(--card)}
+.free{color:var(--kame);font-size:11px;letter-spacing:.05em}
+.memobody{padding:6px 18px 2px;font-size:14.5px;line-height:2.05;color:var(--ink2);word-break:break-word}
+.linkrow{display:flex;gap:9px;flex-wrap:wrap;padding:2px 18px 0}
+.linkrow button{
+  display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);
+  border-radius:99px;padding:4px 14px 4px 5px;cursor:pointer;color:inherit;font-size:13.5px;
+}
+.linkrow .av{width:25px;height:25px;font-size:11px}
+.linkrow .add{border-style:dashed;color:var(--sub);padding:7px 15px;font-size:12.5px}
+
+/* ---------- 生年月日 ---------- */
+.bform{padding:2px 18px 0}
+.brow{display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid var(--line2)}
+.brow>label{width:46px;flex:none;font-size:13.5px;color:var(--sub)}
+.brow input{
+  flex:1;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:11px;
+  padding:12px;font-size:16px;font-variant-numeric:tabular-nums;
+}
+.brow .unit{flex:none;font-size:13px;color:var(--sub);width:16px}
+.unkbtn{
+  flex:none;border:1px solid var(--line);background:var(--card2);color:var(--sub);
+  border-radius:99px;padding:10px 15px;font-size:12.5px;cursor:pointer;
+}
+.unkbtn.on{background:var(--sub);border-color:var(--sub);color:#fff;font-weight:700}
+.bprev{margin:16px 18px 0;padding:14px 16px;border-radius:14px;background:var(--card2);border:1px solid var(--line)}
+.bprev .lb{font-size:10.5px;letter-spacing:.16em;color:var(--dim);margin-bottom:7px}
+.bprev .tx{font-family:"Shippori Mincho",serif;font-size:18px;color:var(--ink);line-height:1.6}
+.bprev .note{margin-top:9px;font-size:12px;color:var(--sub);line-height:1.75}
+.bprev .note.warn{color:var(--shu)}
+
+/* ---------- 入力 ---------- */
+.form .formbody{padding:0 18px 4px}
+.fld{display:block;margin:0 0 14px}
+.fld .lb{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--dim);margin-bottom:6px}
+.fld .lb em{font-style:normal;font-size:10px;color:var(--shu);border:1px solid currentColor;border-radius:99px;padding:0 7px;line-height:1.7}
+.fld input,.fld textarea,.fld select{
+  width:100%;border:1px solid var(--line);background:var(--card);border-radius:12px;
+  padding:12px 13px;font-size:16px;line-height:1.7;
+}
+.fld textarea{resize:vertical;min-height:56px}
+.fld .hlp{display:block;font-size:11.5px;color:var(--dim);line-height:1.75;margin-top:5px}
+.crow{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.crow input{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:11px;padding:11px 12px;font-size:16px}
+.crow .ck{flex:0 0 34%}
+/* 連絡先の1行。URLを貼ると、行の下に「開ける住所です」の印が出る */
+.crow.cwrap{flex-wrap:wrap}
+.clinkmark{flex:0 0 100%;font-size:11.5px;color:var(--ai);margin:-2px 0 2px 2px}
+.starpick{display:flex;align-items:center;gap:2px}
+.starpick button{border:none;background:none;font-size:26px;line-height:1;color:var(--line);cursor:pointer;padding:0 2px}
+.starpick button.on{color:var(--shu)}
+.starnum{margin-left:8px;font-size:13px;color:var(--sub)}
+.chipbox{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;align-items:center}
+.chipbox.sug{opacity:.9}
+.btn{
+  border:1px solid var(--line);background:var(--card);color:var(--ink2);border-radius:11px;
+  padding:11px 16px;font-size:13.5px;font-weight:500;cursor:pointer;
+}
+.btn.primary{background:var(--ai);border-color:var(--ai);color:#fff;font-weight:700}
+.btn.ghost{background:var(--card2)}
+.btn.danger{border-color:color-mix(in srgb,var(--shu) 45%,var(--line));color:var(--shu)}
+.btn.sm{padding:9px 13px;font-size:12.5px}
+.btn.wide{display:block;width:100%;text-align:center;margin-bottom:10px}
+
+/* ---------- 下から出る紙 ---------- */
+#sheet{position:fixed;inset:0;z-index:40;pointer-events:none}
+#sheet.open{pointer-events:auto}
+.sheet-bg{position:absolute;inset:0;background:rgba(10,18,30,.44);opacity:0;transition:opacity .18s}
+#sheet.open .sheet-bg{opacity:1}
+.sheet-card{
+  position:absolute;left:0;right:0;bottom:0;background:var(--card);
+  border-radius:20px 20px 0 0;box-shadow:var(--sh2);
+  max-height:88%;display:flex;flex-direction:column;
+  transform:translateY(100%);transition:transform .2s ease-out;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+#sheet.open .sheet-card{transform:translateY(0)}
+.sheet-head{display:flex;align-items:center;gap:10px;padding:14px 12px 10px 18px;border-bottom:1px solid var(--line)}
+.sheet-head h2{flex:1;margin:0;font-family:"Shippori Mincho",serif;font-size:17px;font-weight:600;letter-spacing:.05em}
+.sheet-body{flex:1;overflow-y:auto;padding:16px 18px}
+.sheet-foot{display:flex;gap:9px;padding:12px 18px 16px;border-top:1px solid var(--line)}
+.sheet-foot .btn{flex:1}
+.sheet-msg{margin:0;font-size:13.5px;color:var(--sub);line-height:1.95}
+.fgroup{margin-bottom:18px}
+.fgroup h4{margin:0 0 8px;font-size:11px;letter-spacing:.16em;color:var(--asagi);font-weight:700}
+.optlist{display:flex;flex-direction:column;gap:8px}
+.opt{
+  border:1px solid var(--line);background:var(--card2);border-radius:12px;padding:12px 14px;
+  text-align:left;cursor:pointer;color:inherit;
+}
+.opt.on{border-color:var(--ai);background:color-mix(in srgb,var(--ai) 10%,var(--card))}
+.opt b{display:block;font-size:14.5px;font-weight:500}
+.opt span{display:block;font-size:12px;color:var(--sub);margin-top:2px}
+.pickrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.pickrow .btn{flex:1 1 26%}
+.picklist{max-height:46vh;overflow-y:auto;border:1px solid var(--line);border-radius:12px}
+.pickrow-item{
+  display:flex;align-items:center;gap:11px;width:100%;padding:9px 12px;text-align:left;
+  border:none;border-bottom:1px solid var(--line2);background:none;cursor:pointer;color:inherit;
+}
+.pickrow-item:last-child{border-bottom:none}
+.pickrow-item.on{background:color-mix(in srgb,var(--ai) 10%,transparent)}
+.pickrow-item .av{width:34px;height:34px;font-size:15px}
+.pickrow-item .nm{flex:1;min-width:0;font-family:"Shippori Mincho",serif;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pickrow-item .mark{flex:none;color:var(--ai);font-weight:700}
+.kanalist{max-height:52vh;overflow-y:auto}
+.krow{display:flex;gap:9px;align-items:center;margin-bottom:9px}
+.krow .knm{flex:0 0 38%;font-family:"Shippori Mincho",serif;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.krow input{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 11px;font-size:16px}
+.krow .tnum{flex:none;font-size:11.5px;color:var(--dim)}
+
+/* ---------- 知らせ ---------- */
+.toast{
+  position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,14px);
+  background:var(--ink);color:var(--paper);border-radius:12px;padding:11px 18px;font-size:13px;line-height:1.7;
+  max-width:88%;text-align:center;box-shadow:var(--sh2);opacity:0;pointer-events:none;z-index:50;
+  transition:opacity .18s, transform .18s;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.warn{background:var(--shu);color:#fff}
+
+.bootfail{padding:60px 24px;text-align:center;color:var(--sub)}
+.bootfail h1{font-family:"Shippori Mincho",serif;font-size:22px;color:var(--ink)}
+
+/* ---------- iPhone：ホーム画面への入れ方の案内 ----------
+   #app の外に置く帯。画面を組み直しても消えない。
+   下タブ(約70px)と、その上の丸ボタンを避けて浮かせる */
+.iosbar{
+  position:fixed;left:10px;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:14px 16px 12px;box-shadow:var(--sh2);z-index:30;
+  opacity:0;transform:translateY(10px);transition:opacity .2s, transform .2s;
+}
+.iosbar.on{opacity:1;transform:translateY(0)}
+.iosbar-t{
+  font-family:"Shippori Mincho",serif;font-size:15px;font-weight:600;
+  letter-spacing:.04em;color:var(--ink);margin-bottom:9px;
+}
+.iosbar-b{font-size:13px;line-height:2.0;color:var(--ink2)}
+.iosbar-b svg{
+  width:17px;height:17px;vertical-align:-4px;margin:0 2px;
+  stroke:var(--ai);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
+}
+.iosbar-n{
+  display:inline-grid;place-items:center;width:17px;height:17px;margin-right:7px;
+  border-radius:50%;background:var(--ai);color:#fff;
+  font-size:10.5px;font-weight:700;line-height:1;vertical-align:1px;
+}
+.iosbar-w{
+  margin-top:10px;padding-top:9px;border-top:1px solid var(--line2);
+  font-size:12px;line-height:1.85;color:var(--sub);
+}
+.iosbar-f{display:flex;gap:8px;margin-top:12px}
+.iosbar-f .btn{flex:1}
+
+/* 控えを文字で出すときの枠 */
+.bktext{
+  width:100%;box-sizing:border-box;margin-top:4px;
+  border:1px solid var(--line);border-radius:10px;background:var(--card2);color:var(--ink2);
+  padding:10px 12px;font-size:12px;line-height:1.6;resize:vertical;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  -webkit-user-select:text;user-select:text;
+}
+.sheet-msg.dim{color:var(--dim);font-size:12px}
+
+/* ---------- 置かれ方の手当て ----------
+   ★外側の入れ物に包まれて配られると、その入れ物が :root に
+     上下の余白（ノッチ・ホームバー分）を付けてくることがある。
+     こちらは #app・下タブ・知らせで自前に env() を使っているので、
+     そのままだと余白が二重になる。:root には付けない、で統一する。
+   ★色合いも light に固定されることがあるので、両方使えると名乗り直す */
+:root{padding-top:0;padding-bottom:0;color-scheme:light dark}
