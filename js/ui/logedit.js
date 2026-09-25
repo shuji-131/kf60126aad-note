@@ -37,7 +37,7 @@ UI.openLogEdit = function (p, logId) {
           '（ごぶさたの数え直しに入ります）。◇のままだと会ったことにはなりません。</p>'
         : '') +
       '<label class="fld"><span class="lb">日付' + (k === "met" ? '<em>必須</em>' : '（空でよい）') + '</span>' +
-        '<div class="crow"><input type="date" id="logDate" value="' + UI.esc(e.d) + '">' +
+        '<div class="crow"><input ' + UI.NOAUTO + 'type="date" id="logDate" value="' + UI.esc(e.d) + '">' +
         (k !== "met" ? '<button class="btn ghost sm" id="logNoDate">日付なしにする</button>' : '') +
         '</div>' +
         '<span class="hlp">' + (k === "met"
@@ -45,10 +45,10 @@ UI.openLogEdit = function (p, logId) {
           : "空のままだと記録の<b>一番上</b>にまとまります。あとから足せます") + '</span></label>' +
       (k === "plan"
         ? '<label class="fld"><span class="lb">時刻（空でよい）</span>' +
-          '<input type="time" id="logTime" value="' + UI.esc(e.tm) + '"></label>'
+          '<input ' + UI.NOAUTO + 'type="time" id="logTime" value="' + UI.esc(e.tm) + '"></label>'
         : '') +
       '<label class="fld"><span class="lb">内容</span>' +
-        '<textarea id="logText" rows="5" placeholder="' +
+        '<textarea ' + UI.NOAUTO + 'id="logText" rows="5" placeholder="' +
         (k === "met" ? "薬院のカフェで2時間。仕事を続けるか迷っていると。次に会ったら聞く"
          : k === "plan" ? "天神で打ち合わせ"
                        : "インスタで猫を飼い始めたと投稿。名前はもなか") + '">' + UI.esc(e.x) + '</textarea></label>';

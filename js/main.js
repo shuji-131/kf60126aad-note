@@ -8,7 +8,7 @@ var App = (function () {
 
   /* ★アプリの版。Androidの入れ物を作り直す時は、この4つを必ずそろえる:
        ここ ／ sw.js の CACHE ／ app/build.gradle の versionCode・versionName ／ MainActivity.BUILD_MARK */
-  var BUILD = "v9";
+  var BUILD = "v10";
 
   /* 今動いている版。アプリの中なら入れ物が名乗る版を優先する
      （画面だけ差し替わって入れ物が古い、という食い違いに気付けるように） */

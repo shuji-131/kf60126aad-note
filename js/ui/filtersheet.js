@@ -32,7 +32,7 @@ UI.openFilter = function () {
   });
   var tagFind = tagsAll.length >= 12
     ? '<div class="crow" style="margin:0 0 9px">' +
-        '<input id="ftagq" value="' + UI.esc(UI.FilterTagQ || "") + '" placeholder="タグを絞る（例：大学）">' +
+        '<input ' + UI.NOAUTO + 'id="ftagq" value="' + UI.esc(UI.FilterTagQ || "") + '" placeholder="タグを絞る（例：大学）">' +
       '</div>' +
       '<span class="hlp" id="tagNoHit" hidden>あてはまるタグがありません</span>'
     : '';
@@ -144,7 +144,7 @@ UI.openSearch = function (which) {
   UI.sheet({
     title: isMemo ? "メモを探す" : "名簿を探す",
     body: '<label class="fld"><span class="lb">言葉</span>' +
-      '<input id="sq" value="' + UI.esc(cur) + '" placeholder="' +
+      '<input ' + UI.NOAUTO + 'id="sq" value="' + UI.esc(cur) + '" placeholder="' +
       (isMemo ? "題名・中身・タグ・結びつけた人の名前" : "名前・呼び方・所属・場所・タグ・記録の中身") + '" enterkeyhint="search"></label>' +
       '<p class="sheet-msg">' + (isMemo
         ? "結びつけた人の名前でも当たります。"

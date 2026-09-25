@@ -23,16 +23,16 @@ UI.openSchedEdit = function (p, schedId) {
       : (n < 0 ? "この日はもう過ぎています。残すとそのまま「記録」へ入ります"
                : Sched.whenText(n) + "（" + s.d.replace(/-/g, "/") + "）");
     return '<label class="fld"><span class="lb">日付<em>必須</em></span>' +
-        '<input type="date" id="scDate" value="' + UI.esc(s.d) + '">' +
+        '<input ' + UI.NOAUTO + 'type="date" id="scDate" value="' + UI.esc(s.d) + '">' +
         '<span class="hlp">' + UI.esc(note) + '</span></label>' +
       '<label class="fld"><span class="lb">時刻（空でよい）</span>' +
-        '<div class="crow"><input type="time" id="scTime" value="' + UI.esc(s.tm) + '">' +
+        '<div class="crow"><input ' + UI.NOAUTO + 'type="time" id="scTime" value="' + UI.esc(s.tm) + '">' +
         (s.tm ? '<button class="btn ghost sm" id="scNoTime">時刻なしにする</button>' : '') +
         '</div>' +
         '<span class="hlp">空のままだと「その日のどこか」になります。' +
         '<b>時刻を過ぎても、その日いっぱいは予定に残ります</b></span></label>' +
       '<label class="fld"><span class="lb">内容</span>' +
-        '<textarea id="scText" rows="4" placeholder="天神で打ち合わせ。前に話していた件の返事をもらう">' +
+        '<textarea ' + UI.NOAUTO + 'id="scText" rows="4" placeholder="天神で打ち合わせ。前に話していた件の返事をもらう">' +
         UI.esc(s.x) + '</textarea></label>' +
       '<p class="sheet-msg">日付が過ぎると、この内容は自動で「記録」へ移って残ります。' +
       '会えたのなら、移った記録を押して<b>「● 会った」</b>に付け替えてください' +

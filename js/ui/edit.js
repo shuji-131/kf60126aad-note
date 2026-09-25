@@ -57,8 +57,8 @@ UI.viewEdit = function () {
   var contacts = d.contacts.map(function (c, i) {
     var url = Data.linkOf(c.v);
     return '<div class="crow cwrap">' +
-      '<input class="ck" data-c="' + i + ':k" value="' + UI.esc(c.k) + '" placeholder="LINE / X / 携帯">' +
-      '<input class="cv" data-c="' + i + ':v" value="' + UI.esc(c.v) + '" placeholder="ID・番号・URL">' +
+      '<input ' + UI.NOAUTO + 'class="ck" data-c="' + i + ':k" value="' + UI.esc(c.k) + '" placeholder="LINE / X / 携帯">' +
+      '<input ' + UI.NOAUTO + 'class="cv" data-c="' + i + ':v" value="' + UI.esc(c.v) + '" placeholder="ID・番号・URL">' +
       '<button class="iconbtn sm" data-delc="' + i + '" aria-label="消す">' + IC.trash + '</button>' +
       (url ? '<span class="clinkmark">↗ 押して開ける住所として入っています</span>' : '') +
       '</div>';
@@ -99,7 +99,7 @@ UI.viewEdit = function () {
     '<div class="formbody">' +
       (tagChips.length ? UI.tagrail(tagChips, "pick")
                        : '<div class="chipbox"><span class="blank">まだありません</span></div>') +
-      '<div class="crow"><input id="tagInput" placeholder="タグを足す・下の候補を絞る（例：大学）" enterkeyhint="done">' +
+      '<div class="crow"><input ' + UI.NOAUTO + 'id="tagInput" placeholder="タグを足す・下の候補を絞る（例：大学）" enterkeyhint="done">' +
         '<button class="btn ghost sm" data-act="addtag">足す</button></div>' +
       (suggest.length
         ? UI.tagrail(suggest.map(function (o) {

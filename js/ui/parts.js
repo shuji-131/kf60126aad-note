@@ -199,17 +199,26 @@ UI.confirm = function (title, msg, yesLabel, cb, danger) {
   });
 };
 
+/* ★自動入力よけ。これを全部の入力欄に付ける。
+   端末に保存された住所・電話・クレジットカードが、覚え書きのような
+   何でも書ける欄に候補として並ぶ事故があったため（2026-09-24 実機で確認）。
+   ブラウザはフォームが無いと画面中の入力欄をひとまとめに見て「何の入力画面か」を
+   推測する＝「住まい」「所属」「番号」「数字3つ」が同居していると支払い画面に見える。
+   ★Android では MainActivity 側で端末の自動入力そのものを切ってある。こちらは保険で、
+   iPhone 版（GitHub Pages）にはアプリ側の層が無いので、こちらだけが頼り。 */
+UI.NOAUTO = 'autocomplete="off" autocorrect="off" spellcheck="false" ';
+
 /* 入力欄の組み立て（入力画面で使い回す） */
 UI.input = function (o) {
   var t = o.type || "text";
   if (t === "textarea") {
     return '<label class="fld"><span class="lb">' + UI.esc(o.label) + '</span>' +
-      '<textarea data-f="' + o.name + '" rows="' + (o.rows || 4) + '" placeholder="' + UI.esc(o.ph || "") + '">' +
+      '<textarea ' + UI.NOAUTO + 'data-f="' + o.name + '" rows="' + (o.rows || 4) + '" placeholder="' + UI.esc(o.ph || "") + '">' +
       UI.esc(o.value || "") + '</textarea>' +
       (o.help ? '<span class="hlp">' + o.help + '</span>' : '') + '</label>';
   }
   return '<label class="fld"><span class="lb">' + UI.esc(o.label) + (o.req ? '<em>必須</em>' : '') + '</span>' +
-    '<input type="' + t + '" data-f="' + o.name + '" value="' + UI.esc(o.value || "") + '" ' +
+    '<input ' + UI.NOAUTO + 'type="' + t + '" data-f="' + o.name + '" value="' + UI.esc(o.value || "") + '" ' +
     (o.inputmode ? 'inputmode="' + o.inputmode + '" ' : '') +
     'placeholder="' + UI.esc(o.ph || "") + '">' +
     (o.help ? '<span class="hlp">' + o.help + '</span>' : '') + '</label>';

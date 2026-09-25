@@ -51,7 +51,7 @@ UI.viewCrop = function () {
         '<div class="cropmask"></div><div class="cropring"></div>' +
       '</div>' +
       '<div class="slider"><span>小</span>' +
-        '<input type="range" id="zoom" min="100" max="320" value="' + Math.round(UI.Crop.zoom * 100) + '">' +
+        '<input ' + UI.NOAUTO + 'type="range" id="zoom" min="100" max="320" value="' + Math.round(UI.Crop.zoom * 100) + '">' +
         '<span>大</span></div>' +
       '<div class="croprow">' +
         '<button class="btn ghost" data-act="rotate">' + IC.rotate + ' 90°回す</button>' +

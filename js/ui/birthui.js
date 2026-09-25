@@ -44,7 +44,7 @@ UI.viewBirth = function () {
   function num(f, lb, unit, ph) {
     var v = UI.BD[f], unk = (v == null || v === "");
     return '<div class="brow"><label>' + lb + '</label>' +
-      '<input type="number" inputmode="numeric" data-bf="' + f + '" placeholder="' + ph + '" value="' + (unk ? "" : v) + '">' +
+      '<input ' + UI.NOAUTO + 'type="number" inputmode="numeric" data-bf="' + f + '" placeholder="' + ph + '" value="' + (unk ? "" : v) + '">' +
       '<span class="unit">' + unit + '</span>' +
       '<button class="unkbtn ' + (unk ? "on" : "") + '" data-unk="' + f + '">不明</button></div>';
   }

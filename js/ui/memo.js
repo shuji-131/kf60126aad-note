@@ -116,7 +116,7 @@ UI.viewMemoEdit = function () {
     '<div class="formbody">' +
       (tagChips.length ? UI.tagrail(tagChips, "pick")
                        : '<div class="chipbox"><span class="blank">まだありません</span></div>') +
-      '<div class="crow"><input id="mtagInput" placeholder="タグを足す・下の候補を絞る" enterkeyhint="done">' +
+      '<div class="crow"><input ' + UI.NOAUTO + 'id="mtagInput" placeholder="タグを足す・下の候補を絞る" enterkeyhint="done">' +
         '<button class="btn ghost sm" data-act="maddtag">足す</button></div>' +
       (sug.length
         ? UI.tagrail(sug.map(function (o) {
@@ -190,7 +190,7 @@ UI.pickPeople = function (current, onDone) {
   function open(q) {
     UI.sheet({
       title: "人を結びつける",
-      body: '<div class="crow" style="margin-bottom:10px"><input id="pickq" placeholder="名前で探す" value="' + UI.esc(q || "") + '"></div>' +
+      body: '<div class="crow" style="margin-bottom:10px"><input ' + UI.NOAUTO + 'id="pickq" placeholder="名前で探す" value="' + UI.esc(q || "") + '"></div>' +
             '<div class="picklist">' + rows(q || "") + '</div>',
       foot: '<button class="btn ghost" data-sheet="close">やめる</button>' +
             '<button class="btn primary" id="pickOk">決める（' + chosen.length + '人）</button>',

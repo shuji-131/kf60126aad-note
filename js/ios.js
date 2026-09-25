@@ -207,7 +207,7 @@ var Ios = (function () {
         body: '<p class="sheet-msg">下の文字が控えそのものです。まるごとコピーして、' +
               'メモ帳やメールなど、消えない所に貼って残してください。<br>' +
               '戻すときは、その文字を <b>.json</b> という名前のファイルにして「控えから戻す」で読み込みます。</p>' +
-              '<textarea id="iosBkText" class="bktext" readonly rows="8"></textarea>' +
+              '<textarea autocomplete="off" id="iosBkText" class="bktext" readonly rows="8"></textarea>' +
               '<p class="sheet-msg dim">' + Math.max(1, Math.round(text.length / 1024)) + " KB ぶんの文字です。</p>",
         foot: '<button class="btn ghost" data-sheet="close">閉じる</button>' +
               '<button class="btn primary" id="iosBkCopy">まるごとコピー</button>',

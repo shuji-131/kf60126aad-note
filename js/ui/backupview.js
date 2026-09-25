@@ -156,7 +156,7 @@ UI.fixKana = function () {
     body: '<p class="sheet-msg">埋めると、その人が一覧の「他」の行から出て、ちゃんとの行に並びます。<br>分からない人は空のままで大丈夫です。</p>' +
       '<div class="kanalist">' + list.map(function (p) {
         return '<div class="krow"><span class="knm">' + UI.esc(p.name) + '</span>' +
-          '<input data-kana="' + p.id + '" placeholder="ひらがなで" value=""></div>';
+          '<input ' + UI.NOAUTO + 'data-kana="' + p.id + '" placeholder="ひらがなで" value=""></div>';
       }).join("") + '</div>',
     foot: '<button class="btn ghost" data-sheet="close">やめる</button>' +
           '<button class="btn primary" id="kanaOk">埋める</button>',
@@ -189,7 +189,7 @@ UI.fixTags = function () {
     title: "タグの整理",
     body: '<p class="sheet-msg">名前を変えると、そのタグが付いている人ぜんぶで変わります。<br>同じ名前に変えれば、2つを1つにまとめられます。</p>' +
       '<div class="kanalist">' + tags.map(function (o) {
-        return '<div class="krow"><input data-tagname="' + UI.esc(o.t) + '" value="' + UI.esc(o.t) + '">' +
+        return '<div class="krow"><input ' + UI.NOAUTO + 'data-tagname="' + UI.esc(o.t) + '" value="' + UI.esc(o.t) + '">' +
           '<span class="tnum">' + o.n + '人</span>' +
           '<button class="iconbtn sm" data-deltag="' + UI.esc(o.t) + '" aria-label="消す">' + IC.trash + '</button></div>';
       }).join("") + '</div>',
