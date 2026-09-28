@@ -1,6 +1,6 @@
 @charset "utf-8";
 /* ===========================================================
-   友人帳 — 見た目
+   トモログ — 見た目
    藍染めの段階を色の軸にする。甕覗き→浅葱→縹→藍→留紺。
    朱は「注意の印」と「今いる場所」だけ。あちこちに置かない。
    =========================================================== */
@@ -639,3 +639,156 @@ input[type=range]{flex:1;accent-color:var(--ai);height:26px}
      そのままだと余白が二重になる。:root には付けない、で統一する。
    ★色合いも light に固定されることがあるので、両方使えると名乗り直す */
 :root{padding-top:0;padding-bottom:0;color-scheme:light dark}
+
+/* ===========================================================
+   意匠「文箱（ふばこ）」— 和テイストの装い
+   :root[data-skin="wa"] が付いている間だけ効く上書きの層。
+   既存の決まりは壊さない：
+     ・朱は「注意の印」と「今いる場所」だけ（和でも主役にしない）
+     ・写真の丸（--ring）と .av の形は触らない
+   変えるのは三つだけ。色（和紙と墨）／角（丸みを落とす）／罫（二重罫と縦罫）。
+   =========================================================== */
+
+/* ---------- 色（明るい方＝生成りの和紙） ---------- */
+:root[data-skin="wa"]{
+  --paper:#EBE4D5; --card:#FAF6EC; --card2:#F2EBDC;
+  --line:#D7CCB6;  --line2:#E6DECC;
+  --ink:#241F1A;   --ink2:#463D33; --sub:#6C6053; --dim:#968A78;
+  --ai:#1E3A5C;    --hanada:#3C6E9F; --asagi:#8C6B26; --kame:#C7B99D;
+  --shu:#9E2B25;   --shu-soft:#F0E2DB;
+  --good:#3F6B52;  --warn:#8A6A22;
+  /* 紙は浮かない。影はほぼ置かず、代わりに罫で締める */
+  --sh1:0 1px 0 rgba(90,72,44,.10);
+  --sh2:0 1px 0 rgba(90,72,44,.12), 0 -10px 34px rgba(70,55,30,.16);
+}
+/* ---------- 色（暗い方＝夜の文箱。墨の地に生成りの字） ---------- */
+@media (prefers-color-scheme: dark){
+  :root[data-skin="wa"]:not([data-theme="light"]){
+    --paper:#14120F; --card:#1E1B16; --card2:#262119;
+    --line:#393126;  --line2:#2B251D;
+    --ink:#EDE4D3;   --ink2:#D2C7B3; --sub:#A2957E; --dim:#7B6F5C;
+    --ai:#8FAECF;    --hanada:#7BA2C8; --asagi:#C9A961; --kame:#5A5040;
+    --shu:#D06A5C;   --shu-soft:#3A231E;
+    --good:#6FB18C;  --warn:#CCA25A;
+    --sh1:0 1px 0 rgba(0,0,0,.5);
+    --sh2:0 1px 0 rgba(0,0,0,.5), 0 -10px 34px rgba(0,0,0,.55);
+  }
+}
+:root[data-skin="wa"][data-theme="dark"]{
+  --paper:#14120F; --card:#1E1B16; --card2:#262119;
+  --line:#393126;  --line2:#2B251D;
+  --ink:#EDE4D3;   --ink2:#D2C7B3; --sub:#A2957E; --dim:#7B6F5C;
+  --ai:#8FAECF;    --hanada:#7BA2C8; --asagi:#C9A961; --kame:#5A5040;
+  --shu:#D06A5C;   --shu-soft:#3A231E;
+  --good:#6FB18C;  --warn:#CCA25A;
+  --sh1:0 1px 0 rgba(0,0,0,.5);
+  --sh2:0 1px 0 rgba(0,0,0,.5), 0 -10px 34px rgba(0,0,0,.55);
+}
+
+/* ---------- 角を落とす（箱と入力欄）----------
+   丸みのある今の姿に対して、和は角を立てる。3px だけ残すのは、
+   完全な直角にすると画面の中で線が刺さって見えるため。 */
+[data-skin="wa"] .iconbtn,
+[data-skin="wa"] .iconbtn.sm,
+[data-skin="wa"] .backwide,
+[data-skin="wa"] .typebtn,
+[data-skin="wa"] .disclaim,
+[data-skin="wa"] .axcard,
+[data-skin="wa"] .matchbox,
+[data-skin="wa"] .callout,
+[data-skin="wa"] .bigbtn,
+[data-skin="wa"] .bprev,
+[data-skin="wa"] .btn,
+[data-skin="wa"] .mini,
+[data-skin="wa"] .opt,
+[data-skin="wa"] .picklist,
+[data-skin="wa"] .iosbar,
+[data-skin="wa"] .bktext,
+[data-skin="wa"] .toast,
+[data-skin="wa"] .cropstage,
+[data-skin="wa"] .warnbadge,
+[data-skin="wa"] .todo,
+[data-skin="wa"] .seg,
+[data-skin="wa"] .fld input,
+[data-skin="wa"] .fld textarea,
+[data-skin="wa"] .fld select,
+[data-skin="wa"] .crow input,
+[data-skin="wa"] .brow input,
+[data-skin="wa"] .krow input{ border-radius:3px }
+
+[data-skin="wa"] .sheet-card{ border-radius:4px 4px 0 0 }
+[data-skin="wa"] :focus-visible{ border-radius:2px }
+
+/* ---------- 丸い札 → 短冊（たんざく） ----------
+   99px の俵型をやめて、角のある細長い札にする。名札や付箋の形。 */
+[data-skin="wa"] .chip,
+[data-skin="wa"] .pill,
+[data-skin="wa"] .backbtn,
+[data-skin="wa"] .sure,
+[data-skin="wa"] .sec h3 button,
+[data-skin="wa"] .entry .d em,
+[data-skin="wa"] .plan .d em,
+[data-skin="wa"] .tyrow .cnt,
+[data-skin="wa"] .linkrow button,
+[data-skin="wa"] .unkbtn,
+[data-skin="wa"] .clink .go,
+[data-skin="wa"] .seg button{ border-radius:2px }
+
+/* 50音のつまみ見出しも角を立てる（帳面の爪に見せる） */
+[data-skin="wa"] .index button{ border-radius:2px 2px 0 0 }
+
+/* ---------- 罫 ---------- */
+/* 上帯の下は二重罫。和綴じの表紙の線に寄せる */
+[data-skin="wa"] .appbar{
+  background:var(--card);
+  border-bottom:3px double var(--line);
+}
+/* 題字の字間を広げる（扁額の字のように） */
+[data-skin="wa"] .appbar-title{ letter-spacing:.14em }
+[data-skin="wa"] .appbar-title.sm{ letter-spacing:.09em }
+
+/* 小見出しの頭に朱の縦罫を立てる。「ここから」の合図を横線でなく縦線で出す */
+[data-skin="wa"] .sec h3,
+[data-skin="wa"] .fgroup h4,
+[data-skin="wa"] .grouphead{
+  border-left:2px solid var(--shu);
+  padding-left:9px;
+}
+[data-skin="wa"] .rowhead b{
+  border-left:2px solid var(--kame);
+  padding-left:9px;
+  letter-spacing:.2em;
+}
+
+/* ---------- 今いる場所の印は「棒」でなく「ぽち」 ---------- */
+[data-skin="wa"] .tabbar button.on::before{
+  width:5px;height:5px;border-radius:50%;top:2px;
+}
+[data-skin="wa"] .index button.on::after{
+  width:5px;height:5px;border-radius:50%;bottom:-2px;
+}
+
+/* ---------- 人の丸に金茶の輪を掛ける ----------
+   丸そのものは変えない（写真の切り取り --ring と揃っているため）。
+   縁を一本足すだけで、和紙の地の上でも人の顔が浮く。
+   ★重なって並ぶ .whodots .av と、札の中の小さい丸には掛けない */
+[data-skin="wa"] .person .av,
+[data-skin="wa"] .phead .av{
+  box-shadow:0 0 0 1px var(--card), 0 0 0 2px color-mix(in srgb,var(--asagi) 62%,transparent);
+}
+
+/* ---------- 丸のまま残すもの（角を落とす指定に巻き込まれないように） ---------- */
+[data-skin="wa"] .av,
+[data-skin="wa"] .fab,
+[data-skin="wa"] .pill span,
+[data-skin="wa"] .alertbar .ic,
+[data-skin="wa"] .camic,
+[data-skin="wa"] .entry .mk .dot,
+[data-skin="wa"] .iosbar-n,
+[data-skin="wa"] .cropring{ border-radius:50% }
+[data-skin="wa"] .meter,
+[data-skin="wa"] .meter i,
+[data-skin="wa"] .tabbar .badge{ border-radius:99px }
+/* ○メモ・予定の印は形で区別している。和でも崩さない */
+[data-skin="wa"] .entry.isplan .dot,
+[data-skin="wa"] .plan .dia{ border-radius:2px }

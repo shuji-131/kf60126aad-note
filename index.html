@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>友人帳</title>
+<title>トモログ</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <!-- 身内で使うページ。検索の一覧に載せない -->
 <meta name="robots" content="noindex, nofollow, noarchive">
@@ -16,10 +16,15 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="友人帳">
+<meta name="apple-mobile-web-app-title" content="トモログ">
 
 <!-- 書体は端末に入っているものを使う。外へ一切つながないため -->
 <link rel="stylesheet" href="css/style.css">
+
+<!-- 装い（今の姿／文箱＝和）。画面を描く前に当てる。
+     ここで当てないと、起動のたびに前の色が一瞬見えてしまう。
+     覚えているのは js/main.js。ここは当てるだけ（★build.py も同じ一行を書き出す） -->
+<script>try{if(localStorage.getItem("yujincho.skin")==="wa")document.documentElement.setAttribute("data-skin","wa");}catch(e){}</script>
 </head>
 <body>
 

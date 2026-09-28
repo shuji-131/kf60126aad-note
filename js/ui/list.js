@@ -114,7 +114,7 @@ UI.viewList = function () {
   var sortName = { kana: "50音順", cold: "ごぶさた順", met: "出会った順", star: "近さ順" }[db.settings.sort];
 
   return UI.appbar({
-    title: "友人帳",
+    title: "トモログ",
     actions: UI.iconbtn("sort", '<span style="font-size:11.5px;letter-spacing:.04em">' + sortName + '</span>', "並べ替え") +
              UI.iconbtn("search", IC.search, "探す") +
              UI.iconbtn("filter", IC.filter, "絞り込み"),

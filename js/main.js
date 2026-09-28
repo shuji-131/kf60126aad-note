@@ -8,7 +8,45 @@ var App = (function () {
 
   /* ★アプリの版。Androidの入れ物を作り直す時は、この4つを必ずそろえる:
        ここ ／ sw.js の CACHE ／ app/build.gradle の versionCode・versionName ／ MainActivity.BUILD_MARK */
-  var BUILD = "v10";
+  var BUILD = "v11";
+
+  /* ---------- 装い（見た目の切り替え） ----------
+     "ai" … 今の姿（藍染め）  ／  "wa" … 文箱（和テイスト）
+     ★控えには入れない。端末ごとの好みなので yujincho.skin に別に持つ。
+       控えの形（書き出して戻す往復）を変えずに済む。
+     ★当てるのは <html> の data-skin 一つだけ。css/style.css の末尾に
+       [data-skin="wa"] の上書きが入っていて、色・角・罫の三つが差し替わる。 */
+  var SKIN_KEY = "yujincho.skin";
+  var SKIN_BAR = { ai: "#28497A", wa: "#1E3A5C" };
+
+  function skin() {
+    try { return localStorage.getItem(SKIN_KEY) === "wa" ? "wa" : "ai"; }
+    catch (e) { return "ai"; }
+  }
+
+  function applySkin(v) {
+    try {
+      var r = document.documentElement;
+      if (!r) return;
+      if (v === "wa") r.setAttribute("data-skin", "wa");
+      else r.removeAttribute("data-skin");
+      /* 端末の上帯（時計が並ぶ所）の色も揃える */
+      var m = document.querySelector('meta[name="theme-color"]');
+      if (m) m.setAttribute("content", SKIN_BAR[v] || SKIN_BAR.ai);
+    } catch (e) { /* 装いが当たらなくても中身は読める。止めない */ }
+  }
+
+  function setSkin(v) {
+    v = (v === "wa") ? "wa" : "ai";
+    try { localStorage.setItem(SKIN_KEY, v); }
+    catch (e) { /* 覚えられなくても、今開いている画面には効かせる */ }
+    applySkin(v);
+    render();
+  }
+
+  /* 読み込んだ時点で当てる。boot を待つと、控えの画面から戻った時などに
+     一瞬だけ前の色が見える */
+  applySkin(skin());
 
   /* 今動いている版。アプリの中なら入れ物が名乗る版を優先する
      （画面だけ差し替わって入れ物が古い、という食い違いに気付けるように） */
@@ -229,6 +267,9 @@ var App = (function () {
       /* iPhone用。ファイルとして保存が滑ったときの逃げ道と、入れ方の案内 */
       case "exptext":  Ios.textBackup(); break;
       case "iosguide": Ios.guide(); break;
+      /* 装い */
+      case "skinai": setSkin("ai"); UI.toast("今の姿（藍染め）にしました"); break;
+      case "skinwa": setSkin("wa"); UI.toast("文箱（和）にしました"); break;
       case "fixkana": UI.fixKana(); break;
       case "fixtags": UI.fixTags(); break;
       case "recrop":  UI.recropAll(); break;
@@ -301,7 +342,8 @@ var App = (function () {
   }
 
   return { BUILD: BUILD, buildMark: buildMark,
-           boot: boot, render: render, act: act, showSaveError: showSaveError };
+           boot: boot, render: render, act: act, showSaveError: showSaveError,
+           skin: skin, setSkin: setSkin };
 })();
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", App.boot);

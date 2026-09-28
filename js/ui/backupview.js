@@ -15,6 +15,7 @@ UI.viewBackup = function () {
   var since = Backup.daysSinceBackup();
   var textKB = Math.round(Store.usageBytes() / 1024);
   var phMB = (UI.PhotoStat.bytes / 1048576).toFixed(1);
+  var sk = App.skin();
 
   var warn = since == null
     ? '<div class="callout">まだ一度も控えを取っていません。<br><b>' + Ios.clearName() + 'を消すと名簿も消えます。</b></div>'
@@ -47,6 +48,19 @@ UI.viewBackup = function () {
         '<div class="usub">写真は端末の空きに応じて数百MBまで置けます</div></div>' +
     '</div>' +
 
+    /* ★装い。端末ごとの好みなので控えには入れない（yujincho.skin に別に持つ） */
+    UI.sec("見た目") +
+    '<div class="secbody"><div class="optlist">' +
+      '<button class="opt' + (sk === "ai" ? " on" : "") + '" data-act="skinai">' +
+        '<b>今の姿（藍染め）</b><span>白い紙に藍色。角の丸い、すっきりした見た目</span></button>' +
+      '<button class="opt' + (sk === "wa" ? " on" : "") + '" data-act="skinwa">' +
+        '<b>文箱（和）</b><span>生成りの和紙に墨と藍。角を立て、見出しに朱の縦罫を立てた見た目</span></button>' +
+    '</div>' +
+    '<p class="secnote" style="padding-left:0;padding-right:0">' +
+      '見た目だけが変わります。名簿の中身は同じです。<br>' +
+      'この端末だけの設定なので、控えには入りません。</p>' +
+    '</div>' +
+
     UI.sec("手入れ") +
     '<button class="bigbtn wide" data-act="fixkana"><b>ふりがなが空の人 — ' + noKana.length + '人</b>' +
       '<span>まとめて埋める。埋めるとその行に並びます</span></button>' +
@@ -64,7 +78,7 @@ UI.viewBackup = function () {
 
     UI.sec("この帳面について") +
     '<div class="secbody about">' +
-      '<p>友人帳 — 個人的なつながりのできた人を、出会いから今日まで残しておく名簿帳。</p>' +
+      '<p>トモログ — 個人的なつながりのできた人を、出会いから今日まで残しておく名簿帳。</p>' +
       '<p>書いた内容は<b>この端末の中だけ</b>にあります。外へ送っていません。</p>' +
       '<p class="dim">形の版 ' + db.meta.v + ' ／ アプリの版 ' + UI.esc(App.buildMark()) + '</p>' +
     '</div>' +

@@ -45,7 +45,7 @@ var Backup = (function () {
 
   function download(withPhotos) {
     return build(withPhotos).then(function (out) {
-      var name = "友人帳_控え_" + stamp() + (withPhotos ? "_写真あり" : "") + ".json";
+      var name = "トモログ_控え_" + stamp() + (withPhotos ? "_写真あり" : "") + ".json";
       var text = JSON.stringify(out);
 
       /* Androidアプリの中では、端末の「ダウンロード」へ直に書き出す。
@@ -77,7 +77,7 @@ var Backup = (function () {
     try { data = JSON.parse(text); }
     catch (e) { return Promise.reject(new Error("控えのファイルとして読めませんでした")); }
     if (!data || data.app !== "yujincho" || !Array.isArray(data.people)) {
-      return Promise.reject(new Error("友人帳の控えではないようです"));
+      return Promise.reject(new Error("トモログの控えではないようです"));
     }
 
     var incoming = {

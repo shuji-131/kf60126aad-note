@@ -14,12 +14,26 @@ UI.nl2br = function (s) { return UI.esc(s).replace(/\n/g, "<br>"); };
 
 /* 名前から色を決める。同じ人はいつも同じ色になる */
 UI.AVCOL = ["#28497A", "#3A6EA8", "#3E8C9E", "#4B6A8C", "#5B7FA6", "#2F6B7A", "#6B7FA0", "#356184"];
+/* ★装い「文箱（和）」用の丸の色。生成りの和紙に載せるので、藍だけでなく
+   墨茶・紫紺・鶯茶まで広げて深く沈める。赤系は入れない（朱は注意の印に取ってある）。
+   ★本数は AVCOL と必ず同じ8色にする。名前から出す番号が同じなので、
+     装いを変えても「同じ人は同じ位置の色」のまま入れ替わる */
+UI.AVCOL_WA = ["#2B4257", "#31527A", "#3E6B6B", "#4A3B5C", "#4A403A", "#3A5A47", "#5A4A2E", "#2F4A5C"];
+/* ★丸の色は style 属性で書くので css では差し替えられない。ここで選ぶ。
+   App ではなく <html> の印を直接見る（parts.js は main.js より先に読まれるため） */
+UI.avPalette = function () {
+  try {
+    if (document.documentElement.getAttribute("data-skin") === "wa") return UI.AVCOL_WA;
+  } catch (e) { /* 端末のふりをした場所では今の姿でよい */ }
+  return UI.AVCOL;
+};
 UI.hue = function (s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
 
 /* 写真がある人は後から貼る（hydratePhotos）。無い人は名前の1文字＋色付きの丸 */
 UI.avatar = function (p, cls, which) {
   var ch = (p.name || "？").charAt(0);
-  var col = UI.AVCOL[UI.hue(p.name || "？") % UI.AVCOL.length];
+  var pal = UI.avPalette();
+  var col = pal[UI.hue(p.name || "？") % pal.length];
   return '<div class="av ' + (cls || "") + '"' +
     (p.photo ? ' data-photo="' + UI.esc(p.photo) + '" data-which="' + (which || "thumb") + '"' : '') +
     /* ★必ず background-color と書く。短縮形の background で書いてはいけない。
