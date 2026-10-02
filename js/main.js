@@ -8,7 +8,7 @@ var App = (function () {
 
   /* ★アプリの版。Androidの入れ物を作り直す時は、この4つを必ずそろえる:
        ここ ／ sw.js の CACHE ／ app/build.gradle の versionCode・versionName ／ MainActivity.BUILD_MARK */
-  var BUILD = "v11";
+  var BUILD = "v12";
 
   /* ---------- 装い（見た目の切り替え） ----------
      "ai" … 今の姿（藍染め）  ／  "wa" … 文箱（和テイスト）
@@ -108,6 +108,7 @@ var App = (function () {
   }
 
   /* ---- 描く ---- */
+  var lastFrame = null;   // 前に描いた画面。スクロール位置をこれに書き残す
   function render() {
     var app = UI.el("app");
     var f = Nav.top();
@@ -127,7 +128,27 @@ var App = (function () {
       case "backup":   html = UI.viewBackup(); break;
       default:         html = UI.viewList();
     }
+
+    /* ★描き直すと .view が新しい枠に入れ替わり、スクロールが先頭に戻っていた
+       （入力画面で確度・★・連絡先を足す、を押すたびに一番上へ飛んだ）。
+       位置は画面ごとに覚えておく＝同じ画面の描き直しでも、下の画面から戻った時でも元の所に出る */
+    var oldView = app.querySelector(".view");
+    if (oldView && lastFrame) lastFrame._sy = oldView.scrollTop;
+    var rails = (f === lastFrame)
+      ? Array.prototype.map.call(app.querySelectorAll(".tagrail"), function (r) {
+          return { c: r.className, x: r.scrollLeft };
+        })
+      : [];
+    lastFrame = f;
+
     app.innerHTML = html;
+
+    var newView = app.querySelector(".view");
+    if (newView && f._sy) newView.scrollTop = f._sy;
+    /* タグの帯（横）も、同じ画面の描き直しなら位置を保つ。並びが同じ帯にだけ戻す */
+    app.querySelectorAll(".tagrail").forEach(function (r, i) {
+      if (rails[i] && rails[i].c === r.className) r.scrollLeft = rails[i].x;
+    });
 
     bindCommon(app);
     if (f.v === "list") UI.bindList(app);
