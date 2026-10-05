@@ -394,6 +394,21 @@ button,input,textarea,select{font-family:inherit;font-size:inherit;color:inherit
 .matchbox.good{border-color:color-mix(in srgb,var(--good) 35%,var(--line))}
 .matchbox.bad{border-color:color-mix(in srgb,var(--shu) 35%,var(--line))}
 .matchbox .cds{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+/* 型の頁の「もっと詳しく」＝折りたたみ。見出しの行を押すと開く */
+.fold{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-top:8px;overflow:hidden}
+.fold summary{list-style:none;cursor:pointer;display:flex;align-items:center;min-height:48px;padding:0 14px;font-size:14.5px;font-weight:600;color:var(--ink2);-webkit-tap-highlight-color:transparent}
+.fold summary::-webkit-details-marker{display:none}
+.fold summary::after{content:"＋";margin-left:auto;padding-left:10px;font-size:18px;color:var(--ai);font-weight:700}
+.fold[open] summary::after{content:"－"}
+.fold[open] summary{border-bottom:1px solid var(--line)}
+.foldin{padding:11px 14px 13px}
+.foldin .reftext+.reftext{margin-top:8px}
+.letters{display:flex;flex-direction:column;gap:7px}
+.letters .lt{display:flex;align-items:baseline;gap:10px;font-size:14px;line-height:1.7;color:var(--ink2)}
+.letters .lt b{flex:0 0 22px;text-align:center;font-size:16px;color:var(--ai)}
+.tagok,.tagng{display:inline-block;font-size:11px;letter-spacing:.08em;border-radius:6px;padding:0 6px;margin-right:7px;line-height:1.8;border:1px solid}
+.tagok{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,var(--line))}
+.tagng{color:var(--shu);border-color:color-mix(in srgb,var(--shu) 45%,var(--line))}
 
 /* ---------- 気にかける・控え ---------- */
 .callout{

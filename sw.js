@@ -4,14 +4,14 @@
    ======================================================= */
 /* ★画面のファイルを直したら必ずここの番号を上げる。
    上げないと、前に置いてあった古いJSがそのまま出て「直したのに変わらない」になる */
-var CACHE = "yujincho-v12";
+var CACHE = "yujincho-v13";
 
 var FILES = [
   "./",
   "index.html",
   "app.webmanifest",
   "css/style.css",
-  "ref/mbti.js", "ref/love.js",
+  "ref/mbti.js", "ref/love.js", "ref/more.js",
   "js/data.js", "js/migrate.js", "js/store.js", "js/photos.js",
   "js/birth.js", "js/select.js", "js/sched.js", "js/nav.js", "js/backup.js", "js/icons.js",
   "js/ios.js",

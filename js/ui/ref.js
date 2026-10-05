@@ -2,8 +2,19 @@
 /* =======================================================
    ui/ref.js — 早見表（MBTI16 / ラブタイプ16）
    どちらも目安。決めつけではない、と頭に必ず出す。
+   型の頁の「もっと詳しく」は折りたたみ（<details>）。中身は ref/more.js
    ======================================================= */
 var UI = window.UI || {};
+
+/* 折りたたみ1つ。最初は閉じておく（開け閉めは端末まかせ＝画面を描き直さない） */
+function refFold(title, inner) {
+  return '<details class="fold"><summary>' + title + '</summary><div class="foldin">' + inner + '</div></details>';
+}
+function refLetters(rows) {
+  return '<div class="letters">' + rows.map(function (r) {
+    return '<div class="lt"><b>' + r[0] + '</b><span>' + r[1] + '</span></div>';
+  }).join("") + '</div>';
+}
 
 UI.viewRef = function () {
   var db = Store.current();
@@ -64,6 +75,18 @@ UI.viewRefDetail = function () {
       '<div class="sec plain"><h3>接するときのコツ<i></i></h3>' +
       '<p class="reftext">' + m.t + '</p></div>' +
       '<div class="sec plain"><h3>分類<i></i></h3><p class="refsub">' + m.g + 'グループ</p></div>';
+    var mm = MBTI_MORE[m.c];
+    if (mm) {
+      main += '<div class="sec plain"><h3>もっと詳しく<i></i></h3>' +
+        refFold("4文字の読み方", refLetters(m.c.split("").map(function (ch) { return [ch, MBTI_LETTERS[ch] || ""]; }))) +
+        refFold("得意なこと", '<p class="reftext">' + mm.s + '</p>') +
+        refFold("つまずきやすい所", '<p class="reftext">' + mm.w + '</p>') +
+        refFold("喜ばれること・避けたいこと",
+          '<p class="reftext"><span class="tagok">喜ばれる</span>' + mm.j + '</p>' +
+          '<p class="reftext"><span class="tagng">避けたい</span>' + mm.x + '</p>') +
+        refFold("疲れている時のサイン", '<p class="reftext">' + mm.st + '</p>') +
+        '</div>';
+    }
   } else {
     var l = loveOf(code);
     if (!l) return UI.appbar({ title: "早見表", back: true }) + '<div class="view">' + UI.empty("その型は見つかりません") + '</div>' + UI.tabbar();
@@ -76,6 +99,19 @@ UI.viewRefDetail = function () {
         '<div class="matchbox bad"><div class="lb">相 性 ✕</div><div class="cds">' +
           l.b.map(function (c) { return '<button class="mini" data-ty="love:' + c + '">' + c + '</button>'; }).join("") + '</div></div>' +
       '</div>';
+    var lm = LOVE_MORE[l.c];
+    if (lm) {
+      main += '<div class="sec plain"><h3>もっと詳しく<i></i></h3>' +
+        refFold("4文字の読み方", refLetters(l.c.split("").map(function (ch, i) {
+          var ax = LOVE_AXES[i], ks = ax.k.split(" / "), vs = ax.v.split(" / ");
+          return [ch, vs[ks.indexOf(ch)] || ""];
+        }))) +
+        refFold("連絡やデートの傾向", '<p class="reftext">' + lm.r + '</p>') +
+        refFold("うれしいこと", '<p class="reftext">' + lm.j + '</p>') +
+        refFold("すれ違いやすい所", '<p class="reftext">' + lm.x + '</p>') +
+        refFold("関わるときのコツ", '<p class="reftext">' + lm.k + '</p>') +
+        '</div>';
+    }
   }
 
   return UI.appbar({ title: kind === "mbti" ? "MBTI" : "ラブタイプ", back: true }) +
