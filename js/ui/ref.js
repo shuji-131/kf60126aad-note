@@ -1,6 +1,6 @@
 "use strict";
 /* =======================================================
-   ui/ref.js — 早見表（性格診断16 / ラブタイプ16）。画面の文字は「性格診断」と書く（元の名前は登録商標）
+   ui/ref.js — 早見表（MBTI16 / ラブタイプ16）
    どちらも目安。決めつけではない、と頭に必ず出す。
    型の頁の「もっと詳しく」は折りたたみ（<details>）。中身は ref/more.js
    ======================================================= */
@@ -48,7 +48,7 @@ UI.viewRef = function () {
 
   return UI.appbar({
     title: "早見表",
-    below: '<div class="seg"><button data-refkind="mbti" class="' + (kind === "mbti" ? "on" : "") + '">性格診断</button>' +
+    below: '<div class="seg"><button data-refkind="mbti" class="' + (kind === "mbti" ? "on" : "") + '">MBTI</button>' +
            '<button data-refkind="love" class="' + (kind === "love" ? "on" : "") + '">ラブタイプ</button></div>'
   }) +
   '<div class="view">' +
@@ -114,7 +114,7 @@ UI.viewRefDetail = function () {
     }
   }
 
-  return UI.appbar({ title: kind === "mbti" ? "性格診断" : "ラブタイプ", back: true }) +
+  return UI.appbar({ title: kind === "mbti" ? "MBTI" : "ラブタイプ", back: true }) +
     '<div class="view"><div class="tydetail">' + main + '</div>' +
     UI.sec("この型の人") + whoHtml +
     UI.backWide() +

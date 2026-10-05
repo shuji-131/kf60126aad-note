@@ -20,7 +20,7 @@ UI.viewPerson = function () {
   var m = mbtiOf(p.mbti.code), l = loveOf(p.love.code);
 
   var typeblock = '<div class="types">' +
-    '<button class="typebtn" data-type="mbti:' + UI.esc(p.mbti.code) + '"><span class="lb">性 格 診 断</span>' +
+    '<button class="typebtn" data-type="mbti:' + UI.esc(p.mbti.code) + '"><span class="lb">M B T I</span>' +
       '<span class="cd">' + (p.mbti.code || "—") + '</span>' +
       '<span class="nmj">' + UI.esc(m ? m.n : "未記入") + '</span>' + UI.sureBadge(p.mbti) + '</button>' +
     '<button class="typebtn" data-type="love:' + UI.esc(p.love.code) + '"><span class="lb">ラ ブ タ イ プ</span>' +

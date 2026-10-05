@@ -35,7 +35,7 @@ UI.viewEdit = function () {
     var opts = '<option value="">— 未記入 —</option>' + list.map(function (x) {
       return '<option value="' + x.c + '"' + (cur.code === x.c ? " selected" : "") + '>' + x.c + '　' + x.n + '</option>';
     }).join("");
-    return '<label class="fld"><span class="lb">' + (kind === "mbti" ? "性格診断" : "ラブタイプ") + '</span>' +
+    return '<label class="fld"><span class="lb">' + (kind === "mbti" ? "MBTI" : "ラブタイプ") + '</span>' +
       '<select data-f="' + kind + '.code">' + opts + '</select>' +
       '<div class="seg small" style="margin-top:8px">' +
         ['', 'said', 'guess'].map(function (v) {

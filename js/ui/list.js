@@ -86,7 +86,7 @@ UI.viewList = function () {
     if (s.row !== "全") pills.push(['row', s.row + "行"]);
     if (s.alertOnly) pills.push(['alert', "⚑注意"]);
     if (s.cat) pills.push(['cat', s.cat]);
-    if (s.mbti) pills.push(['mbti', "性格診断 " + s.mbti]);
+    if (s.mbti) pills.push(['mbti', "MBTI " + s.mbti]);
     if (s.love) pills.push(['love', "ラブタイプ " + s.love]);
     if (s.star) pills.push(['star', "近さ★" + s.star + "以上"]);
     s.tags.forEach(function (t) { pills.push(['tag:' + t, "#" + t]); });
