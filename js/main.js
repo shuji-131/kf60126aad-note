@@ -8,7 +8,7 @@ var App = (function () {
 
   /* ★アプリの版。Androidの入れ物を作り直す時は、この4つを必ずそろえる:
        ここ ／ sw.js の CACHE ／ app/build.gradle の versionCode・versionName ／ MainActivity.BUILD_MARK */
-  var BUILD = "v13";
+  var BUILD = "v14";
 
   /* ---------- 装い（見た目の切り替え） ----------
      "ai" … 今の姿（藍染め）  ／  "wa" … 文箱（和テイスト）

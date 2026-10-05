@@ -68,7 +68,7 @@ UI.openFilter = function () {
           '（2つ以上なら「両方付いている人」）</h4>' + tagFind +
           '<div class="chipbox">' + tagItems.join("") + '</div></div>'
         : '') +
-      group("MBTI", mbtiItems) +
+      group("性格診断", mbtiItems) +
       group("ラブタイプ", loveItems) +
       group("近さ", starItems),
     foot: '<button class="btn ghost" id="fclear">ぜんぶ外す</button>' +

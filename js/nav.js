@@ -36,7 +36,7 @@ var Nav = (function () {
       case "backup": return "控え";
       case "ref":
         if (!u.code) return "早見表";
-        return (u.code.split(":")[0] === "mbti" ? "MBTI " : "ラブタイプ ") + u.code.split(":")[1];
+        return (u.code.split(":")[0] === "mbti" ? "性格診断 " : "ラブタイプ ") + u.code.split(":")[1];
       case "memo": {
         var m = db && Data.findMemo(db, u.id);
         return m ? Select.memoTitle(m) : "メモ";
