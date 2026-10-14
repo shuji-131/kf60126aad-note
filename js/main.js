@@ -8,7 +8,7 @@ var App = (function () {
 
   /* ★アプリの版。Androidの入れ物を作り直す時は、この4つを必ずそろえる:
        ここ ／ sw.js の CACHE ／ app/build.gradle の versionCode・versionName ／ MainActivity.BUILD_MARK */
-  var BUILD = "v15";
+  var BUILD = "v16";
 
   /* ---------- 装い（見た目の切り替え） ----------
      "ai" … 今の姿（藍染め）  ／  "wa" … 文箱（和テイスト）
@@ -250,6 +250,10 @@ var App = (function () {
       case "delmemo":  UI.deleteMemo(); break;
       case "msearch":  UI.openSearch("memo"); break;
       case "mclear":   UI.MemoState.search = ""; render(); break;
+      case "munlock":     UI.askUnlock(); break;
+      case "mlockshut":   UI.lockNow(); break;
+      case "mlockchange": UI.askChangeNumber(); break;
+      case "mlockforget": UI.forgetNumber(); break;
       case "maddtag":  UI.addMemoTag(UI.el("mtagInput") ? UI.el("mtagInput").value : ""); break;
       case "mpin": {
         var m = Data.findMemo(db, f.id);
@@ -326,6 +330,15 @@ var App = (function () {
 
     /* 開いたまま日付が変わることがある。裏から戻ってきたらもう一度見る */
     document.addEventListener("visibilitychange", function () {
+      /* ★アプリを離れたら、メモの鍵を閉める。最近のアプリの一覧に中身が写らないよう、
+         閉めた姿に描き直しておく（書いている途中の下書きは消さない） */
+      if (document.visibilityState === "hidden") {
+        if (MemoLock.isOpen(Store.current())) {
+          MemoLock.lock();
+          if (Nav.top().v !== "memoedit") render();
+        }
+        return;
+      }
       if (document.visibilityState !== "visible") return;
       if (sweepSched(true)) render();
     });

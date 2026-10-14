@@ -4,7 +4,7 @@
    ======================================================= */
 /* ★画面のファイルを直したら必ずここの番号を上げる。
    上げないと、前に置いてあった古いJSがそのまま出て「直したのに変わらない」になる */
-var CACHE = "yujincho-v15";
+var CACHE = "yujincho-v16";
 
 var FILES = [
   "./",
@@ -13,11 +13,11 @@ var FILES = [
   "css/style.css",
   "ref/mbti.js", "ref/love.js", "ref/more.js",
   "js/data.js", "js/migrate.js", "js/store.js", "js/photos.js",
-  "js/birth.js", "js/select.js", "js/sched.js", "js/nav.js", "js/backup.js", "js/icons.js",
+  "js/birth.js", "js/select.js", "js/sched.js", "js/memolock.js", "js/nav.js", "js/backup.js", "js/icons.js",
   "js/ios.js",
   "js/ui/parts.js", "js/ui/list.js", "js/ui/person.js", "js/ui/edit.js",
   "js/ui/logedit.js", "js/ui/schededit.js", "js/ui/birthui.js", "js/ui/crop.js", "js/ui/ref.js",
-  "js/ui/care.js", "js/ui/memos.js", "js/ui/memo.js", "js/ui/backupview.js",
+  "js/ui/care.js", "js/ui/memos.js", "js/ui/memo.js", "js/ui/memolockui.js", "js/ui/backupview.js",
   "js/ui/filtersheet.js", "js/main.js",
   "icons/icon-192.png", "icons/icon-512.png",
   "icons/icon-maskable-192.png", "icons/icon-maskable-512.png",

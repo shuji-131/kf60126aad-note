@@ -49,6 +49,29 @@ UI.personRow = function (p, sub, right) {
     '<span class="ago">' + (right != null ? right : Select.agoText(n)) + '</span></div>';
 };
 
+/* ★今日の予定。一覧の「トモログ」の文字のすぐ下に出す。無い日は何も出さない。
+   押すとその人の頁がひらく。多い日は3件まで出して、残りは「気にかける」へ */
+UI.TODAY_MAX = 3;
+UI.todayStrip = function (db) {
+  var list = Sched.upcoming(db, 0).filter(function (o) { return o.n === 0; });
+  if (!list.length) return "";
+  var hm = Sched.nowHM();
+  var today = Data.todayStr();
+  var rows = list.slice(0, UI.TODAY_MAX).map(function (o) {
+    var over = Sched.isOverdueToday(o.s, today, hm);
+    return '<button class="todayitem' + (over ? " over" : "") + '" data-person="' + o.p.id + '">' +
+      '<span class="tm">' + (o.s.tm ? UI.esc(o.s.tm) : "時刻なし") + '</span>' +
+      '<span class="who">' + UI.esc(o.p.name || "（名前なし）") + '</span>' +
+      '<span class="x">' + UI.esc((o.s.x || "").replace(/\n/g, " ")) + (over ? '<em>過ぎました</em>' : '') + '</span>' +
+    '</button>';
+  }).join("");
+  var more = list.length > UI.TODAY_MAX
+    ? '<button class="todaymore" data-tab="care">ほか ' + (list.length - UI.TODAY_MAX) + '件 → 気にかける</button>'
+    : "";
+  return '<div class="todaybar"><div class="todayhead">今日の予定<span class="n">' + list.length + '件</span></div>' +
+    rows + more + '</div>';
+};
+
 UI.viewList = function () {
   var db = Store.current();
   var s = UI.ListState;
@@ -118,7 +141,7 @@ UI.viewList = function () {
     actions: UI.iconbtn("sort", '<span style="font-size:11.5px;letter-spacing:.04em">' + sortName + '</span>', "並べ替え") +
              UI.iconbtn("search", IC.search, "探す") +
              UI.iconbtn("filter", IC.filter, "絞り込み"),
-    below: idx + strip
+    below: UI.todayStrip(db) + idx + strip
   }) +
     '<div class="view">' + active + body + '<div style="height:88px"></div></div>' +
     '<button class="fab" data-act="addperson" aria-label="人を足す">＋</button>' +

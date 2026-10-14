@@ -183,7 +183,9 @@ var Select = (function () {
         var names = m.who.map(function (id) {
           var p = Data.findPerson(db, id); return p ? p.name + " " + p.kana + " " + p.nick : "";
         }).join(" ");
-        var hay = [m.title, m.body, m.tags.join(" "), names].join(" ").toLowerCase();
+        /* ★鍵つきのメモは、開けている間だけ中身でも探せる（閉じていれば題名も中身も空） */
+        var txt = (typeof MemoLock !== "undefined" && MemoLock.isLocked(m)) ? MemoLock.searchText(m) : m.title + " " + m.body;
+        var hay = [txt, m.tags.join(" "), names].join(" ").toLowerCase();
         if (hay.indexOf(String(c.search).toLowerCase()) < 0) return false;
       }
       return true;

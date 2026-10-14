@@ -17,14 +17,24 @@ UI.viewMemo = function () {
     return '<button data-person="' + p.id + '">' + UI.avatar(p) + '<span>' + UI.esc(p.name) + '</span></button>';
   }).join("");
 
+  /* ★鍵が閉じていれば、題名も中身も出さない。直す も出さない（中身が無いまま直すと消える） */
+  var locked = MemoLock.isLocked(m);
+  var t = MemoLock.textOf(m);
+  var bodyHtml = t
+    ? (locked ? '<p class="lockline">🔓 鍵つきのメモ（今は開いています）</p>' : '') +
+      '<div class="memobody">' + (t.body ? UI.nl2br(t.body) : '<span class="blank">（本文なし）</span>') + '</div>'
+    : '<div class="lockbox"><div class="ic">🔒</div><b>鍵がかかっています</b>' +
+      '<span>番号を入れると、題名と中身が読めます</span>' +
+      '<button class="btn primary" data-act="munlock">番号を入れて開ける</button></div>';
+
   return UI.appbar({
-    title: Select.memoTitle(m),
+    title: t ? Select.memoTitle(t) : "鍵つきのメモ",
     back: true,
-    actions: UI.textbtn("editmemo", "直す")
+    actions: t ? UI.textbtn("editmemo", "直す") : ""
   }) +
   '<div class="view">' +
     UI.sec(m.d.replace(/-/g, "/") + " に書いた", '<button data-act="mpin">' + (m.pin ? "ピンを外す" : "上に留める") + '</button>') +
-    '<div class="memobody">' + (m.body ? UI.nl2br(m.body) : '<span class="blank">（本文なし）</span>') + '</div>' +
+    bodyHtml +
     (m.todo
       ? UI.sec("やること") +
         '<button class="bigbtn wide" data-act="mdone"><b>' + (m.done ? "済にしてあります" : "まだ済んでいません") + '</b>' +
@@ -47,11 +57,20 @@ UI.viewMemo = function () {
 UI.openMemoEdit = function (id) {
   var db = Store.current();
   if (id) {
-    UI.MemoDraft = JSON.parse(JSON.stringify(Data.findMemo(db, id)));
+    var src = Data.findMemo(db, id);
+    var t = MemoLock.textOf(src);
+    if (!t) { UI.askUnlock(function () { UI.openMemoEdit(id); }); return; }
+    UI.MemoDraft = JSON.parse(JSON.stringify(src));
     UI.MemoDraft._new = false;
+    /* 鍵つきなら、開いた中身を下書きに入れる。暗号の箱は保存の時に作り直す */
+    UI.MemoDraft.lock = MemoLock.isLocked(src);
+    UI.MemoDraft.title = t.title;
+    UI.MemoDraft.body = t.body;
+    delete UI.MemoDraft.lk;
   } else {
     var m = Data.blankMemo(db);
     m._new = true;
+    m.lock = false;
     UI.MemoDraft = m;
     Store.mark("meta");
   }
@@ -100,6 +119,12 @@ UI.viewMemoEdit = function () {
         '<div class="seg small"><button type="button" data-todo="0" class="' + (!d.todo ? "on" : "") + '">ただのメモ</button>' +
         '<button type="button" data-todo="1" class="' + (d.todo ? "on" : "") + '">やること</button></div>' +
         '<span class="hlp">やることは「気にかける」と下タブの印に出ます</span></div>' +
+      '<div class="fld"><span class="lb">🔒 鍵</span>' +
+        '<div class="seg small"><button type="button" data-lock="0" class="' + (!d.lock ? "on" : "") + '">かけない</button>' +
+        '<button type="button" data-lock="1" class="' + (d.lock ? "on" : "") + '">鍵をかける</button></div>' +
+        '<span class="hlp">' + (MemoLock.hasNumber(db)
+          ? '鍵をかけると、番号を入れるまで題名も中身も見えません'
+          : '鍵をかけると、番号を入れるまで題名も中身も見えません。初めての時は保存する時に番号を決めます') + '</span></div>' +
       (d.todo ? '<div class="fld"><span class="lb">今の状態</span>' +
         '<div class="seg small"><button type="button" data-done="0" class="' + (!d.done ? "on" : "") + '">未済</button>' +
         '<button type="button" data-done="1" class="' + (d.done ? "on" : "") + '">済</button></div></div>' : '') +
@@ -142,7 +167,7 @@ UI.bindMemoEdit = function (app) {
   app.querySelectorAll("[data-f]").forEach(function (n) {
     n.addEventListener("input", function () { d[n.dataset.f] = n.value; });
   });
-  [["pin", "pin"], ["todo", "todo"], ["done", "done"]].forEach(function (pair) {
+  [["pin", "pin"], ["todo", "todo"], ["done", "done"], ["lock", "lock"]].forEach(function (pair) {
     app.querySelectorAll("[data-" + pair[0] + "]").forEach(function (b) {
       b.onclick = function () { d[pair[1]] = b.dataset[pair[0]] === "1"; App.render(); };
     });
@@ -229,6 +254,24 @@ UI.saveMemo = function () {
   if (!d.title && !d.body.trim()) { UI.toast("題名か中身のどちらかは入れてください", "warn"); return; }
   if (!d.d) d.d = Data.todayStr();
   if (!d.todo) d.done = false;
+
+  /* ★鍵をかけるなら、暗号の箱を作ってから入れる。番号がまだ無い・閉じている時は先に聞く */
+  if (d.lock) {
+    if (!MemoLock.available()) { UI.lockUnsupported(); return; }
+    if (!MemoLock.hasNumber(db)) { UI.askNewNumber(UI.saveMemo); return; }
+    if (!MemoLock.isOpen(db)) { UI.askUnlock(UI.saveMemo); return; }
+    MemoLock.sealMemo(db, d, d.title, d.body).then(function () { UI.commitMemo(); })
+      ["catch"](function () { UI.toast("鍵をかけられませんでした", "warn"); });
+    return;
+  }
+  MemoLock.unsealMemo(d, d.title, d.body);
+  UI.commitMemo();
+};
+
+UI.commitMemo = function () {
+  var d = UI.MemoDraft, db = Store.current();
+  if (!d) return;
+  delete d.lock;
   Data.touch(d);
   var isNew = d._new;
   delete d._new;

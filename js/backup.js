@@ -98,11 +98,18 @@ var Backup = (function () {
       var haveM = {};
       db.memos.forEach(function (m) { haveM[m.id] = 1; });
       var addM = incoming.memos.filter(function (m) { return !haveM[m.id]; });
+      /* ★鍵つきのメモを足す時、こちらにまだ番号が無ければ、控えの番号を引き継ぐ
+         （無いままだと、足したメモを開く入口が無い） */
+      var mergedSettings = db.settings;
+      if (!(db.settings && db.settings.memoLock) && incoming.settings.memoLock &&
+          addM.some(function (m) { return m.lk; })) {
+        mergedSettings = Object.assign({}, db.settings, { memoLock: incoming.settings.memoLock });
+      }
       next = {
         people: db.people.concat(addP),
         memos: db.memos.concat(addM),
         cats: db.cats,
-        settings: db.settings,
+        settings: mergedSettings,
         meta: db.meta
       };
     } else {

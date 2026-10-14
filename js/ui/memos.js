@@ -13,11 +13,15 @@ UI.memoRow = function (m) {
     var p = Data.findPerson(db, id);
     return p ? UI.avatar(p) : "";
   }).join("");
-  var title = Select.memoTitle(m);
-  return '<button class="memo ' + (m.pin ? "pinned" : "") + '" data-memo="' + m.id + '">' +
-    '<h4 class="ttl ' + (m.title ? "" : "untitled") + '">' +
-      (m.pin ? '<span class="pinic">◆</span>' : '') + UI.esc(title) + '</h4>' +
-    (m.title && m.body ? '<p class="bd">' + UI.esc(m.body.replace(/\n/g, " / ")) + '</p>' : '') +
+  /* ★鍵つきのメモは、閉じていれば題名も中身も出さない（textOf が null を返す） */
+  var locked = MemoLock.isLocked(m);
+  var t = MemoLock.textOf(m);
+  var title = t ? Select.memoTitle(t) : "鍵つきのメモ";
+  return '<button class="memo ' + (m.pin ? "pinned" : "") + (locked ? " locked" + (t ? "" : " shut") : "") + '" data-memo="' + m.id + '">' +
+    '<h4 class="ttl ' + (t && t.title ? "" : "untitled") + '">' +
+      (m.pin ? '<span class="pinic">◆</span>' : '') +
+      (locked ? '<span class="lockic" aria-label="鍵つき">' + (t ? "🔓" : "🔒") + '</span>' : '') + UI.esc(title) + '</h4>' +
+    (t && t.title && t.body ? '<p class="bd">' + UI.esc(t.body.replace(/\n/g, " / ")) + '</p>' : '') +
     '<div class="mt">' +
       (m.todo ? '<span class="todo ' + (m.done ? "done" : "") + '">' + (m.done ? "済" : "やること") + '</span>' : '') +
       (who ? '<span class="whodots">' + who + '</span>' : '<span class="free">— 誰にも結びつけていない</span>') +
@@ -53,14 +57,26 @@ UI.viewMemos = function () {
       '<span data-act="mclear">✕</span></span><span class="count">' + list.length + '件</span></div>';
   }
 
+  /* 鍵つきのメモがある時だけ、開ける・閉める の札を出す */
+  var nLocked = MemoLock.lockedCount(db);
+  var lockBtn = nLocked
+    ? (MemoLock.isOpen(db) ? UI.textbtn("mlockshut", "🔒 閉める") : UI.textbtn("munlock", "🔓 開ける"))
+    : "";
+  var lockFoot = MemoLock.hasNumber(db)
+    ? '<div class="lockfoot"><span>🔒 鍵つき ' + nLocked + '件</span>' +
+        '<button data-act="mlockchange">鍵の番号を変える</button>' +
+        '<button data-act="mlockforget">番号を忘れた</button></div>'
+    : "";
+
   return UI.appbar({
     title: "メモ",
-    actions: UI.iconbtn("msearch", IC.search, "探す"),
+    actions: lockBtn + UI.iconbtn("msearch", IC.search, "探す"),
     below: strip
   }) +
   '<div class="view">' +
-    '<div class="disclaim">名簿と別の書き置き。<b>誰の話か分からないまま</b>置いておけます。あとで分かったら人に結びつけると、その人の頁にも出てきます。</div>' +
-    active + body + '<div style="height:88px"></div></div>' +
+    '<div class="disclaim">名簿と別の書き置き。<b>誰の話か分からないまま</b>置いておけます。あとで分かったら人に結びつけると、その人の頁にも出てきます。' +
+      '<br>人に見られたくないメモは、書く画面の「🔒 鍵」で鍵をかけられます。</div>' +
+    active + body + lockFoot + '<div style="height:88px"></div></div>' +
   '<button class="fab" data-act="addmemo" aria-label="メモを書く">＋</button>' +
   UI.tabbar();
 };
